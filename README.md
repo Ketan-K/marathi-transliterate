@@ -88,10 +88,14 @@ Easily enable Marathi phonetic typing on any input element:
 </script>
 ```
 
-#### Typing Experience:
-1. Type `sakhar` and press **Space** &rarr; it instantly converts to `साखर `.
-2. Press **Backspace** immediately after &rarr; it reverts back to `sakhar` (for when you want English words/brands).
-3. Press **Ctrl+M** (or **Cmd+M**) &rarr; toggles between Marathi and English typing.
+#### Interactive Smart Suggesting:
+As you type (e.g. `sakhar`), a floating suggestion popup appears with ranked candidates:
+- **`Space` or `Enter`**: Automatically selects the top recommended candidate (`साखर`).
+- **`1`, `2`, `3`, `4`, `5`**: Press any digit key to select that candidate immediately.
+- **`Arrow Down / Up`**: Navigate through candidate suggestions.
+- **`Esc`**: Dismisses the suggestion popup without converting.
+- **`Backspace`**: Undoes the transliteration back to English.
+- **`Ctrl+M` (or `Cmd+M`)**: Toggles Marathi and English typing mode on the fly.
 
 ---
 
