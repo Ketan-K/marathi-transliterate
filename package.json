@@ -1,0 +1,42 @@
+{
+  "name": "marathi-transliterate",
+  "version": "1.0.0",
+  "description": "Zero-dependency, offline-first Marathi / Devanagari phonetic transliteration library. Converts English typing to Marathi (e.g. sakhar -> साखर) seamlessly in plain JS, Node.js, and frontend frameworks.",
+  "type": "module",
+  "main": "src/index.js",
+  "module": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./dom": "./src/dom.js",
+    "./dictionary": "./src/dictionary.js"
+  },
+  "scripts": {
+    "test": "node tests/transliterate.test.js"
+  },
+  "keywords": [
+    "marathi",
+    "transliterate",
+    "transliteration",
+    "devanagari",
+    "indic",
+    "marathi-typing",
+    "input-tools",
+    "ime",
+    "offline"
+  ],
+  "author": "Ketan Katore",
+  "license": "MIT",
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ketan-K/marathi-transliterate.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Ketan-K/marathi-transliterate/issues"
+  },
+  "homepage": "https://github.com/Ketan-K/marathi-transliterate#readme"
+}
