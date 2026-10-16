@@ -128,10 +128,10 @@ export function getSuggestions(word, options = {}) {
   const phonetic = phoneticTransliterateWord(word);
   if (phonetic) add(phonetic);
 
-  // 4. Smart Marathi phonetic variants expansion (ळ/ल, ड/द, ढ/ध, ट/त, ठ/थ, ण/न, ष/श)
+  // 4. Smart Marathi phonetic variants expansion (ळ/ल, ड/द, ढ/ध, ट/त, ठ/थ, ण/न, ष/श, झ/ज, ई/इ, ऊ/उ)
   const initialCandidates = [...suggestions];
   for (const s of initialCandidates) {
-    // ळ (LLA) and ल (LA)
+    // 4a. ळ (LLA) and ल (LA) - e.g. "keli" -> "केळी", "bhusal" -> "भुसाळ"
     if (s.includes("ल")) {
       if (clean.endsWith("al") && s.endsWith("ल") && !s.endsWith("ाल")) {
         add(s.slice(0, -1) + "ाळ");
@@ -141,7 +141,7 @@ export function getSuggestions(word, options = {}) {
       add(s.replace(/ळ/g, "ल"));
     }
 
-    // ड (DDA) and द (DA) - essential for "Jaad" -> "जाड", "Daba" -> "डबा", etc.
+    // 4b. ड (DDA) and द (DA) - e.g. "Jaad" -> "जाड", "Daba" -> "डबा", "kadak" -> "कडक"
     if (s.includes("द")) {
       if (clean.endsWith("ad") && s.endsWith("द") && !s.endsWith("ाद")) {
         add(s.slice(0, -1) + "ाड");
@@ -151,39 +151,61 @@ export function getSuggestions(word, options = {}) {
       add(s.replace(/ड/g, "द"));
     }
 
-    // ढ (DDHA) and ध (DHA) - e.g. "dhag" -> "ढग"
+    // 4c. ढ (DDHA) and ध (DHA) - e.g. "dhag" -> "ढग", "dhol" -> "ढोल"
     if (s.includes("ध")) {
       add(s.replace(/ध/g, "ढ"));
     } else if (s.includes("ढ")) {
       add(s.replace(/ढ/g, "ध"));
     }
 
-    // ट (TTA) and त (TA) - e.g. "batata" -> "बटाटा"
+    // 4d. ट (TTA) and त (TA) - e.g. "batata" -> "बटाटा", "tomato" -> "टोमॅटो"
     if (s.includes("त")) {
       add(s.replace(/त/g, "ट"));
     } else if (s.includes("ट")) {
-      add(s.replace(/ट/g, "त"));
+      add(s.replace(/त/g, "त"));
     }
 
-    // ठ (TTHA) and थ (THA) - e.g. "thik" -> "ठीक"
+    // 4e. ठ (TTHA) and थ (THA) - e.g. "thik" -> "ठीक", "path" -> "पाठ"
     if (s.includes("थ")) {
       add(s.replace(/थ/g, "ठ"));
     } else if (s.includes("ठ")) {
       add(s.replace(/ठ/g, "थ"));
     }
 
-    // ण (NNA) and न (NA) - e.g. "bana" -> "बाण"
+    // 4f. ण (NNA) and न (NA) - e.g. "pani" -> "पाणी", "bana" -> "बाण", "dane" -> "दाणे"
     if (s.includes("न")) {
       add(s.replace(/न/g, "ण"));
     } else if (s.includes("ण")) {
       add(s.replace(/ण/g, "न"));
     }
 
-    // ष (SSA) and श (SHA)
+    // 4g. ष (SSA) and श (SHA) - e.g. "vishesh" -> "विशेष"
     if (s.includes("श")) {
       add(s.replace(/श/g, "ष"));
     } else if (s.includes("ष")) {
       add(s.replace(/ष/g, "श"));
+    }
+
+    // 4h. झ (JHA) and ज (JA) - e.g. "jhadu" -> "झाडू"
+    if (s.includes("ज") && (clean.includes("jh") || clean.includes("zh") || clean.includes("z"))) {
+      add(s.replace(/ज/g, "झ"));
+    }
+
+    // 4i. Authentic Marathi final dirgha vowel rules (मराठी शुद्धलेखन: अंत्य इकार/उकार दीर्घ)
+    if (s.endsWith("ि")) {
+      add(s.slice(0, -1) + "ी");
+    } else if (s.endsWith("ी")) {
+      add(s.slice(0, -1) + "ि");
+    }
+    if (s.endsWith("ु")) {
+      add(s.slice(0, -1) + "ू");
+    } else if (s.endsWith("ू")) {
+      add(s.slice(0, -1) + "ु");
+    }
+
+    // 4j. Word-ending "a" kana variants (e.g. rama -> रामा & राम)
+    if (clean.endsWith("a") && s.endsWith("ा")) {
+      add(s.slice(0, -1));
     }
   }
 

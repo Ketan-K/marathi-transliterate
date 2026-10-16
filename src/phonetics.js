@@ -28,7 +28,9 @@ const CONSONANTS = [
   { en: "Sh", mr: "ष", caseSensitive: true },
   { en: "SH", mr: "ष", caseSensitive: true },
   { en: "sh", mr: "श" },
+  { en: "ck", mr: "क" },
   { en: "ng", mr: "ङ" },
+  { en: "c", mr: "क" },
 
   // Single consonants - case-sensitive retroflex & special Marathi sounds FIRST
   { en: "T", mr: "ट", caseSensitive: true },
@@ -78,13 +80,14 @@ const INDEPENDENT_VOWELS = [
   { en: "am", mr: "अं" },
   { en: "an", mr: "अं" },
   { en: "ri", mr: "ऋ" },
-  { en: "ru", mr: "ऋ" }
+  { en: "ru", mr: "ऋ" },
+  { en: "R", mr: "ऋ", caseSensitive: true }
 ];
 
 const MATRAS = [
   { en: "aa", mr: "ा" },
   { en: "A", mr: "ा" },
-  { en: "a", mr: "" }, // Inherent vowel: cancels halant, no visible matra
+  { en: "a", mr: "" }, // Inherent vowel: cancels halant; at word end becomes kana
   { en: "ee", mr: "ी" },
   { en: "ii", mr: "ी" },
   { en: "i", mr: "ि" },
@@ -100,8 +103,7 @@ const MATRAS = [
   { en: "o", mr: "ो" },
   { en: "am", mr: "ं" },
   { en: "an", mr: "ं" },
-  { en: "ri", mr: "ृ" },
-  { en: "ru", mr: "ृ" }
+  { en: "R", mr: "ृ", caseSensitive: true }
 ];
 
 /**
@@ -130,7 +132,9 @@ export function phoneticTransliterateWord(text) {
     let matchedVowel = false;
     if (i === 0 || !/[a-zA-Z]/.test(clean[i - 1])) {
       for (const v of INDEPENDENT_VOWELS) {
-        if (clean.substring(i, i + v.en.length).toLowerCase() === v.en.toLowerCase()) {
+        const sub = clean.substring(i, i + v.en.length);
+        const isMatch = v.caseSensitive ? sub === v.en : sub.toLowerCase() === v.en.toLowerCase();
+        if (isMatch) {
           res += v.mr;
           i += v.en.length;
           matchedVowel = true;
@@ -155,11 +159,17 @@ export function phoneticTransliterateWord(text) {
         let matchedMatra = false;
         for (const m of MATRAS) {
           const nextSub = clean.substring(i, i + m.en.length);
-          const mCaseSensitive = m.en === "A";
+          const mCaseSensitive = m.caseSensitive || m.en === "A";
           const mMatch = mCaseSensitive ? nextSub === m.en : nextSub.toLowerCase() === m.en.toLowerCase();
 
           if (mMatch) {
-            res += m.mr;
+            // When user types trailing "a" at the end of word (e.g. daba -> डबा, patrika -> पत्रिका),
+            // in casual Marathi it represents the kana "ा"
+            if (m.en === "a" && i + 1 === n && i > 0) {
+              res += "ा";
+            } else {
+              res += m.mr;
+            }
             i += m.en.length;
             matchedMatra = true;
             break;

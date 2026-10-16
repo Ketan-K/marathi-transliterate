@@ -169,3 +169,43 @@ test("getSuggestions returns candidate list with smart ड/द, ढ/ध, ट/त
   const thikSuggestions = getSuggestions("thik");
   assert.ok(thikSuggestions.includes("ठीक"));
 });
+
+test("Transliterates Marathi corner cases (ratri, vikri, chutney, truck, limbu, etc.) accurately", () => {
+  assert.equal(transliterateWord("ratri"), "रात्री");
+  assert.equal(transliterateWord("vikri"), "विक्री");
+  assert.equal(transliterateWord("kharedi"), "खरेदी");
+  assert.equal(transliterateWord("supari"), "सुपारी");
+  assert.equal(transliterateWord("chutney"), "चटणी");
+  assert.equal(transliterateWord("limbu"), "लिंबू");
+  assert.equal(transliterateWord("bhakri"), "भाकरी");
+  assert.equal(transliterateWord("poli"), "पोळी");
+  assert.equal(transliterateWord("sabudana"), "साबुदाणा");
+  assert.equal(transliterateWord("truck"), "ट्रक");
+  assert.equal(transliterateWord("tractor"), "ट्रॅक्टर");
+  assert.equal(transliterateWord("driver"), "ड्रायव्हर");
+  assert.equal(transliterateWord("dada"), "दादा");
+  assert.equal(transliterateWord("rassa"), "रस्सा");
+  assert.equal(transliterateWord("patta"), "पत्ता");
+  assert.equal(transliterateWord("khadda"), "खड्डा");
+  assert.equal(transliterateWord("dabi"), "डबी");
+});
+
+test("Smart suggestions provide correct dirgha end vowels (मराठी शुद्धलेखन) and conjuncts", () => {
+  const mirchiSug = getSuggestions("mirchi");
+  assert.ok(mirchiSug.includes("मिरची"));
+
+  const bakiSug = getSuggestions("baki");
+  assert.ok(bakiSug.includes("बाकी"));
+
+  const udhariSug = getSuggestions("udhari");
+  assert.ok(udhariSug.includes("उधारी"));
+
+  const paniSug = getSuggestions("pani");
+  assert.ok(paniSug.includes("पाणी"));
+
+  const ratriSug = getSuggestions("ratri");
+  assert.ok(ratriSug.includes("रात्री"));
+
+  const vikriSug = getSuggestions("vikri");
+  assert.ok(vikriSug.includes("विक्री"));
+});
