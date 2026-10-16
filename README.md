@@ -146,6 +146,29 @@ Converts full text, sentences, or paragraphs into Marathi while preserving numbe
 ### `getSuggestions(word: string): string[]`
 Returns candidate phonetic variations for a given word.
 
+### `extendDictionary(customWords: Record<string, string>): void`
+Extends or overrides the global transliteration dictionary with your own custom vocabulary at runtime.
+
+```javascript
+import { extendDictionary, transliterateWord } from "marathi-transliterate";
+
+extendDictionary({
+  "sangamner": "संगमनेर",
+  "myitem": "माझामाल"
+});
+
+transliterateWord("sangamner"); // → "संगमनेर"
+```
+
+### `normalizeMarathi(text: string): string`
+Normalizes Marathi characters (interchangeable ळ/ल, श/ष, ि/ी, ु/ू, and anusvara) for tolerant comparisons and search filtering.
+
+```javascript
+import { normalizeMarathi } from "marathi-transliterate";
+
+normalizeMarathi("भुसाळ") === normalizeMarathi("भुसाल"); // → true
+```
+
 ### `attachDevanagari(element, options): Handler`
 Attaches keyboard listeners to an `<input>` or `<textarea>` element.
 

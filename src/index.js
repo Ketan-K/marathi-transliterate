@@ -4,18 +4,48 @@
  * for Marathi (Devanagari) script with live smart suggestions.
  */
 
-import { MARATHI_DICTIONARY } from './dictionary.js';
-import { phoneticTransliterateWord } from './phonetics.js';
-import { getCachedWord, setCachedWord, fetchOnlineMarathi } from './cache.js';
-import { attachDevanagari } from './dom.js';
+import { MARATHI_DICTIONARY } from "./dictionary.js";
+import { phoneticTransliterateWord } from "./phonetics.js";
+import { getCachedWord, setCachedWord, fetchOnlineMarathi } from "./cache.js";
+import { attachDevanagari } from "./dom.js";
 
 export { MARATHI_DICTIONARY, fetchOnlineMarathi, attachDevanagari };
 
 /**
+ * Extends or overrides the global transliteration dictionary at runtime.
+ * @param {Record<string, string>} customWords - Map of English -> Marathi words
+ */
+export function extendDictionary(customWords) {
+  if (customWords && typeof customWords === "object") {
+    Object.assign(MARATHI_DICTIONARY, customWords);
+  }
+}
+
+/**
+ * Normalizes Marathi characters (interchangeable ळ/ल, श/ष, ि/ी, ु/ू, and anusvar)
+ * for tolerant comparisons and search filtering.
+ * @param {string} str
+ * @returns {string}
+ */
+export function normalizeMarathi(str) {
+  if (!str) return "";
+  return String(str)
+    .toLowerCase()
+    .replace(/ळ/g, "ल")
+    .replace(/ष/g, "श")
+    .replace(/ी/g, "ि")
+    .replace(/ू/g, "ु")
+    .replace(/[ँं]/g, "")
+    .trim();
+}
+
+/**
  * Transliterates a single English word into Marathi (Devanagari).
- * @param {string} word - Romanized word e.g. sakhar, kanda, atata * @returns {string} - Marathi Devanagari script e.g. साखर, कांदा, बटाटा */
+ * @param {string} word - Romanized word e.g. sakhar, kanda, batata
+ * @returns {string} - Marathi Devanagari script e.g. साखर, कांदा, बटाटा
+ */
 export function transliterateWord(word) {
-  if (!word) return '';
+  if (!word) return "";
   const clean = word.toLowerCase().trim();
 
   // 1. Check curated high-accuracy dictionary first
@@ -33,7 +63,7 @@ export function transliterateWord(word) {
   const phonetic = phoneticTransliterateWord(word);
 
   // Background fetch to enrich cache if online (non-blocking)
-  if (typeof fetch !== 'undefined') {
+  if (typeof fetch !== "undefined") {
     fetchOnlineMarathi(clean).catch(() => {});
   }
 
@@ -47,7 +77,7 @@ export function transliterateWord(word) {
  * @returns {string} - Transliterated text
  */
 export function transliterate(text) {
-  if (!text) return '';
+  if (!text) return "";
 
   return text.replace(/[a-zA-Z]+/g, match => {
     return transliterateWord(match);
@@ -61,6 +91,9 @@ export const toDevanagari = transliterate;
 
 /**
  * Returns ranked candidate spelling suggestions for a word.
+ * Guarantees that any word containing "l" automatically provides both "ळ" (LLA)
+ * and "ल" (LA) variants in candidate suggestions (e.g. bhusal -> भुसाळ, भुसळ, भुसल).
+ *
  * @param {string} word
  * @param {Object} [options]
  * @param {number} [options.maxSuggestions=5]
@@ -95,7 +128,21 @@ export function getSuggestions(word, options = {}) {
   const phonetic = phoneticTransliterateWord(word);
   if (phonetic) add(phonetic);
 
-  // 4. Prefix matches from dictionary (if clean.length >= 3)
+  // 4. Smart Marathi ळ (LLA) and ल (LA) variants expansion
+  const initialCandidates = [...suggestions];
+  for (const s of initialCandidates) {
+    if (s.includes("ल")) {
+      // Special Marathi phonetic rule: words ending in "al" often end in "ाळ" (e.g. bhusal -> भुसाळ)
+      if (clean.endsWith("al") && s.endsWith("ल")) {
+        add(s.slice(0, -1) + "ाळ");
+      }
+      add(s.replace(/ल/g, "ळ"));
+    } else if (s.includes("ळ")) {
+      add(s.replace(/ळ/g, "ल"));
+    }
+  }
+
+  // 5. Prefix matches from dictionary (if clean.length >= 3)
   if (clean.length >= 3 && suggestions.length < max) {
     for (const [key, val] of Object.entries(MARATHI_DICTIONARY)) {
       if (key.startsWith(clean) && key !== clean) {
@@ -105,7 +152,7 @@ export function getSuggestions(word, options = {}) {
     }
   }
 
-  // 5. Add raw English word at the end so user can easily keep original
+  // 6. Add raw English word at the end so user can easily keep original
   if (includeOriginal && !suggestions.includes(word)) {
     suggestions.push(word);
   }
@@ -120,6 +167,8 @@ export default {
   toDevanagari,
   getSuggestions,
   attachDevanagari,
+  extendDictionary,
+  normalizeMarathi,
   MARATHI_DICTIONARY,
   fetchOnlineMarathi
 };
