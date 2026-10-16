@@ -14,6 +14,8 @@ Most existing Sanskrit/IAST transliteration libraries convert `sakhar` to **स�
 
 In everyday reality, people in Maharashtra type phonetically:
 - `sakhar` &rarr; **साखर**
+- `jaad` &rarr; **जाड**
+- `daba` &rarr; **डबा**
 - `kanda` &rarr; **कांदा**
 - `batata` &rarr; **बटाटा**
 - `mith` &rarr; **मीठ**
@@ -53,6 +55,9 @@ import { transliterate, transliterateWord } from 'marathi-transliterate';
 
 // Single word transliteration
 transliterateWord('sakhar');  // → 'साखर'
+transliterateWord('jaad');    // → 'जाड'
+transliterateWord('Daba');    // → 'डबा'
+transliterateWord('D');       // → 'ड' (vs 'd' → 'द')
 transliterateWord('kanda');   // → 'कांदा'
 transliterateWord('batata');  // → 'बटाटा'
 transliterateWord('namaskar'); // → 'नमस्कार'

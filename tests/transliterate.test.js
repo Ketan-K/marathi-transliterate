@@ -108,3 +108,64 @@ test("normalizeMarathi normalizes ळ/ल and matras for comparison", () => {
   assert.equal(normalizeMarathi("भुसाळ"), "भुसाल");
   assert.equal(normalizeMarathi("पाटील"), "पाटिल");
 });
+
+test("Transliterates retroflex consonants (ड, ढ, ट, ठ, ण, ळ) and Jaad accurately", () => {
+  // jaad / Jaad / jaaD -> जाड
+  assert.equal(transliterateWord("jaad"), "जाड");
+  assert.equal(transliterateWord("Jaad"), "जाड");
+  assert.equal(transliterateWord("jaaD"), "जाड");
+  assert.equal(transliterateWord("JaaD"), "जाड");
+  assert.equal(transliterateWord("jad"), "जाड");
+  assert.equal(transliterateWord("jada"), "जाडा");
+
+  // Single consonants
+  assert.equal(transliterateWord("D"), "ड");
+  assert.equal(transliterateWord("d"), "द");
+  assert.equal(transliterateWord("T"), "ट");
+  assert.equal(transliterateWord("t"), "त");
+  assert.equal(transliterateWord("Th"), "ठ");
+  assert.equal(transliterateWord("th"), "थ");
+  assert.equal(transliterateWord("Dh"), "ढ");
+  assert.equal(transliterateWord("dh"), "ध");
+  assert.equal(transliterateWord("N"), "ण");
+  assert.equal(transliterateWord("n"), "न");
+  assert.equal(transliterateWord("L"), "ळ");
+  assert.equal(transliterateWord("l"), "ल");
+  assert.equal(transliterateWord("Sh"), "ष");
+  assert.equal(transliterateWord("sh"), "श");
+
+  // Everyday grocery & shop words with retroflex letters
+  assert.equal(transliterateWord("daba"), "डबा");
+  assert.equal(transliterateWord("Daba"), "डबा");
+  assert.equal(transliterateWord("dabba"), "डबा");
+  assert.equal(transliterateWord("papad"), "पापड");
+  assert.equal(transliterateWord("kadak"), "कडक");
+  assert.equal(transliterateWord("laddu"), "लाडू");
+  assert.equal(transliterateWord("bhendi"), "भेंडी");
+  assert.equal(transliterateWord("thik"), "ठीक");
+  assert.equal(transliterateWord("dhag"), "ढग");
+});
+
+test("getSuggestions returns candidate list with smart ड/द, ढ/ध, ट/त variants", () => {
+  const jaadSuggestions = getSuggestions("jaad");
+  assert.ok(jaadSuggestions.includes("जाड"));
+  assert.equal(jaadSuggestions[0], "जाड");
+
+  const JaadSuggestions = getSuggestions("Jaad");
+  assert.ok(JaadSuggestions.includes("जाड"));
+  assert.equal(JaadSuggestions[0], "जाड");
+
+  const dSuggestions = getSuggestions("D");
+  assert.equal(dSuggestions[0], "ड");
+  assert.ok(dSuggestions.includes("द"));
+
+  const lowDSuggestions = getSuggestions("d");
+  assert.equal(lowDSuggestions[0], "द");
+  assert.ok(lowDSuggestions.includes("ड"));
+
+  const dabaSuggestions = getSuggestions("daba");
+  assert.equal(dabaSuggestions[0], "डबा");
+
+  const thikSuggestions = getSuggestions("thik");
+  assert.ok(thikSuggestions.includes("ठीक"));
+});

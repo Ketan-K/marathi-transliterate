@@ -128,17 +128,62 @@ export function getSuggestions(word, options = {}) {
   const phonetic = phoneticTransliterateWord(word);
   if (phonetic) add(phonetic);
 
-  // 4. Smart Marathi ळ (LLA) and ल (LA) variants expansion
+  // 4. Smart Marathi phonetic variants expansion (ळ/ल, ड/द, ढ/ध, ट/त, ठ/थ, ण/न, ष/श)
   const initialCandidates = [...suggestions];
   for (const s of initialCandidates) {
+    // ळ (LLA) and ल (LA)
     if (s.includes("ल")) {
-      // Special Marathi phonetic rule: words ending in "al" often end in "ाळ" (e.g. bhusal -> भुसाळ)
-      if (clean.endsWith("al") && s.endsWith("ल")) {
+      if (clean.endsWith("al") && s.endsWith("ल") && !s.endsWith("ाल")) {
         add(s.slice(0, -1) + "ाळ");
       }
       add(s.replace(/ल/g, "ळ"));
     } else if (s.includes("ळ")) {
       add(s.replace(/ळ/g, "ल"));
+    }
+
+    // ड (DDA) and द (DA) - essential for "Jaad" -> "जाड", "Daba" -> "डबा", etc.
+    if (s.includes("द")) {
+      if (clean.endsWith("ad") && s.endsWith("द") && !s.endsWith("ाद")) {
+        add(s.slice(0, -1) + "ाड");
+      }
+      add(s.replace(/द/g, "ड"));
+    } else if (s.includes("ड")) {
+      add(s.replace(/ड/g, "द"));
+    }
+
+    // ढ (DDHA) and ध (DHA) - e.g. "dhag" -> "ढग"
+    if (s.includes("ध")) {
+      add(s.replace(/ध/g, "ढ"));
+    } else if (s.includes("ढ")) {
+      add(s.replace(/ढ/g, "ध"));
+    }
+
+    // ट (TTA) and त (TA) - e.g. "batata" -> "बटाटा"
+    if (s.includes("त")) {
+      add(s.replace(/त/g, "ट"));
+    } else if (s.includes("ट")) {
+      add(s.replace(/ट/g, "त"));
+    }
+
+    // ठ (TTHA) and थ (THA) - e.g. "thik" -> "ठीक"
+    if (s.includes("थ")) {
+      add(s.replace(/थ/g, "ठ"));
+    } else if (s.includes("ठ")) {
+      add(s.replace(/ठ/g, "थ"));
+    }
+
+    // ण (NNA) and न (NA) - e.g. "bana" -> "बाण"
+    if (s.includes("न")) {
+      add(s.replace(/न/g, "ण"));
+    } else if (s.includes("ण")) {
+      add(s.replace(/ण/g, "न"));
+    }
+
+    // ष (SSA) and श (SHA)
+    if (s.includes("श")) {
+      add(s.replace(/श/g, "ष"));
+    } else if (s.includes("ष")) {
+      add(s.replace(/ष/g, "श"));
     }
   }
 
