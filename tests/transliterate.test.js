@@ -265,3 +265,47 @@ test('Transliterates comprehensive Maharashtrian Kirana staples, FMCG brands & f
   assert.equal(transliterateWord('surfexcel'), 'सर्फ एक्सेल');
   assert.equal(transliterateWord('vimbar'), 'विम बार');
 });
+
+test("Accurately transliterates English loanwords with Chandra ॉ / ॅ and FMCG staples (polish, coil, rajhans, sunth)", () => {
+  // Target bug reports: polish, coil, rajhans, sunth
+  assert.equal(transliterateWord("polish"), "पॉलिश");
+  assert.ok(getSuggestions("polish").includes("पॉलिश"));
+  assert.equal(getSuggestions("polish")[0], "पॉलिश");
+
+  const poSuggestions = getSuggestions("po");
+  assert.ok(poSuggestions.includes("पॉ"));
+  assert.ok(poSuggestions.includes("पो"));
+
+  assert.equal(transliterateWord("coil"), "कॉईल");
+  assert.ok(getSuggestions("coil").includes("कॉईल"));
+  assert.equal(getSuggestions("coil")[0], "कॉईल");
+
+  const coSuggestions = getSuggestions("co");
+  assert.ok(coSuggestions.includes("कॉ"));
+  assert.ok(coSuggestions.includes("को"));
+
+  assert.equal(transliterateWord("rajhans"), "राजहंस");
+  assert.equal(getSuggestions("rajhans")[0], "राजहंस");
+
+  assert.equal(transliterateWord("sunth"), "सुंठ");
+  assert.equal(getSuggestions("sunth")[0], "सुंठ");
+
+  const sunSuggestions = getSuggestions("sun");
+  assert.ok(sunSuggestions.includes("सुं"));
+  assert.ok(sunSuggestions.includes("सुंठ"));
+
+  // Chandra ॉ and ॅ loanwords
+  assert.equal(transliterateWord("coffee"), "कॉफी");
+  assert.equal(transliterateWord("sauce"), "सॉस");
+  assert.equal(transliterateWord("stock"), "स्टॉक");
+  assert.equal(transliterateWord("doctor"), "डॉक्टर");
+  assert.equal(transliterateWord("chocolate"), "चॉकलेट");
+  assert.equal(transliterateWord("battery"), "बॅटरी");
+  assert.equal(transliterateWord("packet"), "पॅकेट");
+
+  // Diphthongs without leaking English alphabet characters
+  assert.equal(transliterateWord("oil"), "ऑईल");
+  const oilSug = getSuggestions("oil");
+  assert.ok(oilSug.includes("ऑईल"));
+  assert.ok(!oilSug[0].includes("i"));
+});

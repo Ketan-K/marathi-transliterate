@@ -220,10 +220,44 @@ export function getSuggestions(word, options = {}) {
       if (withAnusvar.endsWith("ि")) add(withAnusvar.slice(0, -1) + "ी");
       if (withAnusvar.endsWith("ी")) add(withAnusvar.slice(0, -1) + "ि");
     }
+
+    // 4l. Chandra "ॉ" (Candra O, \u0949) and "ो" (O, \u094B)
+    // Essential for English loanwords in grocery & everyday shop items
+    // e.g. polish -> पॉलिश, coil -> कॉईल, coffee -> कॉफी, doctor -> डॉक्टर, sauce -> सॉस, box -> बॉक्स, ball -> बॉल, stock -> स्टॉक
+    if (s.includes("ो")) {
+      add(s.replace(/ो/g, "ॉ"));
+    } else if (s.includes("ॉ")) {
+      add(s.replace(/ॉ/g, "ो"));
+    }
+    if (s.startsWith("ओ")) {
+      add("ऑ" + s.slice(1));
+    } else if (s.startsWith("ऑ")) {
+      add("ओ" + s.slice(1));
+    }
+
+    // 4m. Chandra "ॅ" (Candra E, \u0945) and "े" (E) / "ै" (AI)
+    // For English loanwords: battery -> बॅटरी, packet -> पॅकेट, snack -> स्नॅक्स, bat -> बॅट, match -> मॅच
+    if (s.includes("े")) {
+      add(s.replace(/े/g, "ॅ"));
+    } else if (s.includes("ॅ")) {
+      add(s.replace(/ॅ/g, "े"));
+    }
+
+    // 4n. Smart Anusvara on "su" prefixes and "sunth"
+    // e.g. typing "sun" offers "सुं" (with anusvara) and "सुंठ"
+    if (clean.startsWith("sun")) {
+      add("सुं");
+      add("सुंठ");
+    }
+
+    // 4o. Smart "rajhans" and compound words
+    if (clean.startsWith("rajh")) {
+      add("राजहंस");
+    }
   }
 
-  // 5. Prefix matches from dictionary (if clean.length >= 3)
-  if (clean.length >= 3 && suggestions.length < max) {
+  // 5. Prefix matches from dictionary (if clean.length >= 2)
+  if (clean.length >= 2 && suggestions.length < max) {
     for (const [key, val] of Object.entries(MARATHI_DICTIONARY)) {
       if (key.startsWith(clean) && key !== clean) {
         add(val);

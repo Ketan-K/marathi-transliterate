@@ -129,9 +129,37 @@ export function phoneticTransliterateWord(text) {
       continue;
     }
 
-    // Check independent vowel at the beginning of a word or after non-alpha
+    // Check independent vowel at the beginning of a word, after non-alpha, or after another vowel
     let matchedVowel = false;
-    if (i === 0 || !/[a-zA-Z]/.test(clean[i - 1])) {
+    const prevChar = i > 0 ? clean[i - 1] : "";
+    const isAfterVowel = prevChar && /[aeiou]/i.test(prevChar);
+
+    if (i === 0 || !/[a-zA-Z]/.test(prevChar) || isAfterVowel) {
+      if (isAfterVowel) {
+        const nextTwo = clean.substring(i, i + 2).toLowerCase();
+        if (nextTwo === "ee" || nextTwo === "ii") {
+          res += "ई";
+          i += 2;
+          matchedVowel = true;
+        } else if (nextTwo === "oo" || nextTwo === "uu") {
+          res += "ऊ";
+          i += 2;
+          matchedVowel = true;
+        } else if (clean[i].toLowerCase() === "i") {
+          res += "ई";
+          i += 1;
+          matchedVowel = true;
+        } else if (clean[i].toLowerCase() === "u") {
+          res += "ऊ";
+          i += 1;
+          matchedVowel = true;
+        } else if (clean[i].toLowerCase() === "a") {
+          i += 1;
+          matchedVowel = true;
+        }
+      }
+
+      if (!matchedVowel) {
       const initialNasal = clean.substring(i, i + 2).toLowerCase();
       if (initialNasal === 'am' || initialNasal === 'an') {
         const charAfter = clean[i + 2];
@@ -151,6 +179,7 @@ export function phoneticTransliterateWord(text) {
           matchedVowel = true;
           break;
         }
+      }
       }
       if (matchedVowel) continue;
     }
