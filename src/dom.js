@@ -218,7 +218,7 @@ export function attachDevanagari(target, options = {}) {
         selectCandidate(selectedIndex, e.key === 'Enter' ? '' : ' ');
         return;
       }
-      if (e.key === ' ') {
+      if (e.key === ' ' || e.key === 'Spacebar' || e.code === 'Space') {
         e.preventDefault();
         selectCandidate(selectedIndex, ' ');
         return;

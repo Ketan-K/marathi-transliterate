@@ -309,3 +309,37 @@ test("Accurately transliterates English loanwords with Chandra ॉ / ॅ and FMC
   assert.ok(oilSug.includes("ऑईल"));
   assert.ok(!oilSug[0].includes("i"));
 });
+
+test("Accurately transliterates Kranti and Watt across all platforms offline", () => {
+  // Kranti (oil brand and Marathi word)
+  assert.equal(transliterateWord("kranti"), "क्रांती");
+  assert.equal(transliterateWord("Kranti"), "क्रांती");
+  assert.equal(transliterateWord("krantioil"), "क्रांती तेल");
+  assert.equal(transliterateWord("krantitel"), "क्रांती तेल");
+  const krantiSug = getSuggestions("kranti");
+  assert.ok(krantiSug.includes("क्रांती"));
+  assert.ok(krantiSug.includes("क्रांति"));
+  assert.equal(krantiSug[0], "क्रांती");
+
+  // Watt and electrical terms
+  assert.equal(transliterateWord("watt"), "वॉट");
+  assert.equal(transliterateWord("Watt"), "वॉट");
+  assert.equal(transliterateWord("watts"), "वॉट");
+  const wattSug = getSuggestions("watt");
+  assert.ok(wattSug.includes("वॉट"));
+  assert.ok(wattSug.includes("वॅट"));
+  assert.ok(wattSug.includes("वाट"));
+  assert.equal(wattSug[0], "वॉट");
+
+  // Electrical accessories
+  assert.equal(transliterateWord("bulb"), "बल्ब");
+  assert.equal(transliterateWord("led"), "एलईडी");
+  assert.equal(transliterateWord("switch"), "स्विच");
+  assert.equal(transliterateWord("socket"), "सॉकेट");
+  assert.equal(transliterateWord("wire"), "वायर");
+  assert.equal(transliterateWord("plug"), "प्लग");
+  assert.equal(transliterateWord("holder"), "होल्डर");
+
+  // Compound phrase transliteration
+  assert.equal(transliterate("9 watt bulb ani kranti oil"), "9 वॉट बल्ब आणि क्रांती ऑईल");
+});

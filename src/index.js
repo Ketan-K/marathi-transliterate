@@ -223,11 +223,13 @@ export function getSuggestions(word, options = {}) {
 
     // 4l. Chandra "ॉ" (Candra O, \u0949) and "ो" (O, \u094B)
     // Essential for English loanwords in grocery & everyday shop items
-    // e.g. polish -> पॉलिश, coil -> कॉईल, coffee -> कॉफी, doctor -> डॉक्टर, sauce -> सॉस, box -> बॉक्स, ball -> बॉल, stock -> स्टॉक
+    // e.g. watt -> वॉट / वॅट / वाट, polish -> पॉलिश, coil -> कॉईल, coffee -> कॉफी, doctor -> डॉक्टर, sauce -> सॉस, box -> बॉक्स, ball -> बॉल, stock -> स्टॉक
     if (s.includes("ो")) {
       add(s.replace(/ो/g, "ॉ"));
     } else if (s.includes("ॉ")) {
       add(s.replace(/ॉ/g, "ो"));
+      add(s.replace(/ॉ/g, "ॅ"));
+      add(s.replace(/ॉ/g, "ा"));
     }
     if (s.startsWith("ओ")) {
       add("ऑ" + s.slice(1));
@@ -241,6 +243,7 @@ export function getSuggestions(word, options = {}) {
       add(s.replace(/े/g, "ॅ"));
     } else if (s.includes("ॅ")) {
       add(s.replace(/ॅ/g, "े"));
+      add(s.replace(/ॅ/g, "ॉ"));
     }
 
     // 4n. Smart Anusvara on "su" prefixes and "sunth"
@@ -254,6 +257,22 @@ export function getSuggestions(word, options = {}) {
     if (clean.startsWith("rajh")) {
       add("राजहंस");
     }
+
+    // 4p. Smart Kana + Anusvara (ां) expansion (मराठी शुद्धलेखन)
+    // e.g. "kranti" -> "क्रांती" / "क्रांति", "shanti" -> "शांती", "kanti" -> "कांती", "kanda" -> "कांदा", "gandhi" -> "गांधी"
+    if (s.includes("ं")) {
+      const withKanaAnusvar = s.replace(/([^ािीुूेैोौॉॅ्\s])ं/g, "$1ां");
+      if (withKanaAnusvar !== s) {
+        add(withKanaAnusvar);
+        if (withKanaAnusvar.endsWith("ि")) add(withKanaAnusvar.slice(0, -1) + "ी");
+        if (withKanaAnusvar.endsWith("ी")) add(withKanaAnusvar.slice(0, -1) + "ि");
+      }
+    }
+  }
+
+  // Background fetch to enrich cache if online (non-blocking)
+  if (typeof fetch !== "undefined" && !getCachedWord(clean)) {
+    fetchOnlineMarathi(clean).catch(() => {});
   }
 
   // 5. Prefix matches from dictionary (if clean.length >= 2)
