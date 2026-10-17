@@ -131,6 +131,16 @@ export function phoneticTransliterateWord(text) {
     // Check independent vowel at the beginning of a word or after non-alpha
     let matchedVowel = false;
     if (i === 0 || !/[a-zA-Z]/.test(clean[i - 1])) {
+      const initialNasal = clean.substring(i, i + 2).toLowerCase();
+      if (initialNasal === 'am' || initialNasal === 'an') {
+        const charAfter = clean[i + 2];
+        const isFollowedByVowel = charAfter && /[aeiouA]/i.test(charAfter);
+        if (!isFollowedByVowel) {
+          res += 'अं';
+          i += 2;
+          matchedVowel = true;
+        }
+      }
       for (const v of INDEPENDENT_VOWELS) {
         const sub = clean.substring(i, i + v.en.length);
         const isMatch = v.caseSensitive ? sub === v.en : sub.toLowerCase() === v.en.toLowerCase();
@@ -157,7 +167,23 @@ export function phoneticTransliterateWord(text) {
 
         // Check for attached vowel matra
         let matchedMatra = false;
-        for (const m of MATRAS) {
+
+        // Check 2-letter nasal matras (am, an) representing Marathi Anusvara (ं)
+        // when followed by a consonant or at end of word.
+        // e.g. 'bandhu' -> 'ब' + 'ं' + 'धु' = 'बंधु', 'sampat' -> 'संपत', 'pankaj' -> 'पंकज'
+        const nextTwo = clean.substring(i, i + 2).toLowerCase();
+        if (nextTwo === 'am' || nextTwo === 'an') {
+          const charAfter = clean[i + 2];
+          const isFollowedByVowel = charAfter && /[aeiouA]/i.test(charAfter);
+          if (!isFollowedByVowel) {
+            res += 'ं';
+            i += 2;
+            matchedMatra = true;
+          }
+        }
+
+        if (!matchedMatra) {
+          for (const m of MATRAS) {
           const nextSub = clean.substring(i, i + m.en.length);
           const mCaseSensitive = m.caseSensitive || m.en === "A";
           const mMatch = mCaseSensitive ? nextSub === m.en : nextSub.toLowerCase() === m.en.toLowerCase();
@@ -174,6 +200,7 @@ export function phoneticTransliterateWord(text) {
             matchedMatra = true;
             break;
           }
+        }
         }
 
         // If no vowel followed and next character is also a consonant, apply halant (virama ्)

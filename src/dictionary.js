@@ -3,6 +3,25 @@
  * Kirana/grocery items, customer names, units, and shop terms.
  */
 export const MARATHI_DICTIONARY = {
+  // --- Popular Marathi Kirana Brands, Masale & Staples with Anusvara ---
+  'rambandhu': 'रामबंधू',
+  'rambandhoo': 'रामबंधू',
+  'rambandhuu': 'रामबंधू',
+  'bandhu': 'बंधू',
+  'bandhuu': 'बंधू',
+  'bandhoo': 'बंधू',
+  'pravin': 'प्रवीण',
+  'suhana': 'सुहाना',
+  'everest': 'एव्हरेस्ट',
+  'badshah': 'बादशाह',
+  'rambandhupapad': 'रामबंधू पापड',
+  'shingada': 'शिंगाडा',
+  'bhendi': 'भेंडी',
+  'bundi': 'बुंदी',
+  'tambaku': 'तंबाखू',
+  'gulabjam': 'गुलाबजाम',
+  'gulabjamun': 'गुलाबजामून',
+
   // --- Grocery & Kirana Staples ---
   'sakhar': 'साखर',
   'saakhar': 'साखर',

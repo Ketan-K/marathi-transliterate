@@ -207,6 +207,19 @@ export function getSuggestions(word, options = {}) {
     if (clean.endsWith("a") && s.endsWith("ा")) {
       add(s.slice(0, -1));
     }
+
+    // 4k. Smart Anusvara (टिंब) variants expansion (मराठी शुद्धलेखन)
+    // Automatically generates standard Marathi Anusvara spellings for conjunct nasals
+    // e.g. "बन्धु" -> "बंधू" / "बंधु", "सम्पत" -> "संपत", "आनन्द" -> "आनंद"
+    const anusvarRegex = /(?:न्|म्|ङ्|ञ्|ण्)(?=[क-ह])/g;
+    if (anusvarRegex.test(s)) {
+      const withAnusvar = s.replace(anusvarRegex, "ं");
+      add(withAnusvar);
+      if (withAnusvar.endsWith("ु")) add(withAnusvar.slice(0, -1) + "ू");
+      if (withAnusvar.endsWith("ू")) add(withAnusvar.slice(0, -1) + "ु");
+      if (withAnusvar.endsWith("ि")) add(withAnusvar.slice(0, -1) + "ी");
+      if (withAnusvar.endsWith("ी")) add(withAnusvar.slice(0, -1) + "ि");
+    }
   }
 
   // 5. Prefix matches from dictionary (if clean.length >= 3)

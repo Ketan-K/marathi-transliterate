@@ -209,3 +209,19 @@ test("Smart suggestions provide correct dirgha end vowels (मराठी श�
   const vikriSug = getSuggestions("vikri");
   assert.ok(vikriSug.includes("विक्री"));
 });
+
+test('Accurately handles Marathi Anusvara (टिंब) and brand names like Rambandhu', () => {
+  assert.equal(transliterateWord('rambandhu'), 'रामबंधू');
+  assert.equal(transliterateWord('bandhu'), 'बंधू');
+  assert.equal(transliterateWord('sampat'), 'संपत');
+  assert.equal(transliterateWord('anand'), 'आनंद');
+  assert.equal(transliterateWord('shankar'), 'शंकर');
+
+  const ramSuggs = getSuggestions('rambandhu');
+  assert.ok(ramSuggs.includes('रामबंधू'));
+  assert.ok(ramSuggs.includes('रामबंधु'));
+
+  const bandhuSuggs = getSuggestions('bandhu');
+  assert.ok(bandhuSuggs.includes('बंधू'));
+  assert.ok(bandhuSuggs.includes('बंधु'));
+});
