@@ -29,7 +29,8 @@ const CONSONANTS = [
   { en: "SH", mr: "ष", caseSensitive: true },
   { en: "sh", mr: "श" },
   { en: "ck", mr: "क" },
-  { en: "ng", mr: "ङ" },
+  { en: "NG", mr: "ङ", caseSensitive: true },
+  { en: "ng", mr: "ंग" },
   { en: "c", mr: "क" },
 
   // Single consonants - case-sensitive retroflex & special Marathi sounds FIRST
@@ -221,6 +222,9 @@ export function phoneticTransliterateWord(text) {
       i++;
     }
   }
+
+  // Standard Marathi Shuddhalekhan Rule: nasal conjuncts before consonants become Anusvara
+  res = res.replace(/(?:न्|म्|ङ्|ञ्|ण्)(?=[क-ह])/g, "ं");
 
   return res;
 }

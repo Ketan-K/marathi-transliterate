@@ -225,3 +225,43 @@ test('Accurately handles Marathi Anusvara (टिंब) and brand names like Ra
   assert.ok(bandhuSuggs.includes('बंधू'));
   assert.ok(bandhuSuggs.includes('बंधु'));
 });
+
+test('Transliterates comprehensive Maharashtrian Kirana staples, FMCG brands & fasting items', () => {
+  // Regional Brands
+  assert.equal(transliterateWord('everest'), 'एव्हरेस्ट');
+  assert.equal(transliterateWord('badshah'), 'बादशाह');
+  assert.equal(transliterateWord('suhana'), 'सुहाना');
+  assert.equal(transliterateWord('bedekar'), 'बेडेकर');
+  assert.equal(transliterateWord('pravin'), 'प्रवीण');
+  assert.equal(transliterateWord('katdare'), 'काटदरे');
+  assert.equal(transliterateWord('chitale'), 'चितळे');
+  assert.equal(transliterateWord('chitalebandhu'), 'चितळे बंधू');
+  assert.equal(transliterateWord('lijjatpapad'), 'लिज्जत पापड');
+  assert.equal(transliterateWord('societytea'), 'सोसायटी चहा');
+  assert.equal(transliterateWord('waghbakri'), 'वाघ बकरी');
+
+  // Masale & Spices
+  assert.equal(transliterateWord('godamasala'), 'गोडा मसाला');
+  assert.equal(transliterateWord('kandalasunmasala'), 'कांदा लसूण मसाला');
+  assert.equal(transliterateWord('misalmasala'), 'मिसळ मसाला');
+  assert.equal(transliterateWord('pavbhajimasala'), 'पाव भाजी मसाला');
+  assert.equal(transliterateWord('sambharmasala'), 'सांभार मसाला');
+  assert.equal(transliterateWord('hing'), 'हिंग');
+
+  // Fasting (Upvas) Items
+  assert.equal(transliterateWord('sabudana'), 'साबुदाणा');
+  assert.equal(transliterateWord('bhagar'), 'भगर');
+  assert.equal(transliterateWord('rajgira'), 'राजगिरा');
+  assert.equal(transliterateWord('batatakees'), 'बटाटा कीस');
+  assert.equal(transliterateWord('thalipeeth'), 'थालिपीठ');
+
+  // Staples & Produce
+  assert.equal(transliterateWord('toordal'), 'तूर डाळ');
+  assert.equal(transliterateWord('moongdal'), 'मूग डाळ');
+  assert.equal(transliterateWord('bhendi'), 'भेंडी');
+  assert.equal(transliterateWord('kurdai'), 'कुरडई');
+  assert.equal(transliterateWord('sandge'), 'सांडगे');
+  assert.equal(transliterateWord('kolhapurigul'), 'कोल्हापुरी गूळ');
+  assert.equal(transliterateWord('surfexcel'), 'सर्फ एक्सेल');
+  assert.equal(transliterateWord('vimbar'), 'विम बार');
+});
