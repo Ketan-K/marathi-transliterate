@@ -423,3 +423,59 @@ test("Accurately transliterates compound honorifics (-saheb, -rao, -sheth), fast
   assert.equal(transliterateWord("toop"), "तूप");
   assert.equal(transliterateWord("taak"), "ताक");
 });
+
+test("Accurately transliterates shanti and all similar/related cases (kana+anusvara & dirgha -ti words)", () => {
+  // Shanti & Shant Family
+  assert.equal(transliterateWord("shanti"), "शांती");
+  assert.equal(transliterateWord("shaanti"), "शांती");
+  assert.equal(transliterateWord("shantee"), "शांती");
+  assert.equal(transliterateWord("shanta"), "शांता");
+  assert.equal(transliterateWord("shantata"), "शांतता");
+  assert.equal(transliterateWord("shantanu"), "शांतनु");
+  assert.equal(transliterateWord("shantiniketan"), "शांतीनिकेतन");
+  assert.equal(transliterateWord("sushant"), "सुशांत");
+  assert.equal(transliterateWord("nishant"), "निशांत");
+
+  // Similar Kana + Anusvara (ां) words
+  assert.equal(transliterateWord("kanti"), "कांती");
+  assert.equal(transliterateWord("bhranti"), "भ्रांती");
+  assert.equal(transliterateWord("chandi"), "चांदी");
+  assert.equal(transliterateWord("gandhi"), "गांधी");
+  assert.equal(transliterateWord("bhande"), "भांडे");
+  assert.equal(transliterateWord("bhandi"), "भांडी");
+  assert.equal(transliterateWord("tanda"), "तांडा");
+  assert.equal(transliterateWord("sandhi"), "संधी");
+  assert.equal(transliterateWord("sandhya"), "संध्या");
+  assert.equal(transliterateWord("jayanti"), "जयंती");
+  assert.equal(transliterateWord("damayanti"), "दमयंती");
+  assert.equal(transliterateWord("vasanti"), "वसंती");
+  assert.equal(transliterateWord("dhanwantari"), "धन्वंतरी");
+
+  // Similar Marathi Shuddhalekhan Dirgha End-Vowels (-ti)
+  assert.equal(transliterateWord("shakti"), "शक्ती");
+  assert.equal(transliterateWord("bhakti"), "भक्ती");
+  assert.equal(transliterateWord("mukti"), "मुक्ती");
+  assert.equal(transliterateWord("yukti"), "युक्ती");
+  assert.equal(transliterateWord("vyakti"), "व्यक्ती");
+  assert.equal(transliterateWord("priti"), "प्रीती");
+  assert.equal(transliterateWord("kirti"), "कीर्ती");
+  assert.equal(transliterateWord("niti"), "नीती");
+  assert.equal(transliterateWord("smruti"), "स्मृती");
+  assert.equal(transliterateWord("jyoti"), "ज्योती");
+  assert.equal(transliterateWord("aarti"), "आरती");
+  assert.equal(transliterateWord("murti"), "मूर्ती");
+  assert.equal(transliterateWord("sampatti"), "संपत्ती");
+  assert.equal(transliterateWord("srushti"), "सृष्टी");
+  assert.equal(transliterateWord("drishti"), "दृष्टी");
+
+  // Smart suggestions check
+  const shantiSuggs = getSuggestions("shanti");
+  assert.ok(shantiSuggs.includes("शांती"));
+
+  const chandiSuggs = getSuggestions("chandi");
+  assert.ok(chandiSuggs.includes("चांदी"));
+
+  const shaktiSuggs = getSuggestions("shakti");
+  assert.ok(shaktiSuggs.includes("शक्ती"));
+});
+
