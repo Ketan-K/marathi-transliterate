@@ -29,6 +29,17 @@ In everyday reality, people in Maharashtra type phonetically:
 - `chaha` &rarr; **चहा**
 - `dnyaneshwar` &rarr; **ज्ञानेश्वर**
 - `patil` &rarr; **पाटील**
+- `khandeshi` &rarr; **खान्देशी**
+- `khandesh` &rarr; **खान्देश**
+- `ahirani` &rarr; **अहिराणी**
+- `varhadi` &rarr; **वऱ्हाडी** / `varhad` &rarr; **वऱ्हाड**
+- `kokani` &rarr; **कोकणी** / `malvani` &rarr; **मालवणी**
+- `thecha` &rarr; **ठेचा**
+- `kalna` &rarr; **कळणा**
+- `shevbhaji` &rarr; **शेवभाजी**
+- `bharit` &rarr; **भरीत**
+- `bhandar` &rarr; **भांडार**
+- `vyapari` &rarr; **व्यापारी**
 
 `marathi-transliterate` is built specifically for modern Marathi phonetic typing:
 - **Zero dependencies**: Pure JavaScript, ~15 KB.
@@ -137,6 +148,35 @@ export function MarathiInput() {
   );
 }
 ```
+
+---
+
+## Regional Dialects & Cultural Words (खानदेशी, अहिराणी, वऱ्हाडी, कोकणी)
+
+`marathi-transliterate` natively handles difficult Marathi conjuncts, regional dialect spellings, traditional foods, and business terminology without getting garbled:
+
+| Category | Input | Output | Suggestions |
+| :--- | :--- | :--- | :--- |
+| **Khandesh & Ahirani** | `khandeshi` | **खान्देशी** | `['खान्देशी', 'खानदेशी', 'खांदेशी']` |
+| | `khandesh` | **खान्देश** | `['खान्देश', 'खानदेश', 'खांदेश']` |
+| | `ahirani` | **अहिराणी** | `['अहिराणी', 'अहिराणि']` |
+| | `khandoba` | **खंडोबा** | `['खंडोबा', 'खंडेराव']` |
+| **Varhad & Vidarbha** | `varhad` / `warhad` | **वऱ्हाड** | ऱ्ह conjunct (`वऱ्हाड`) |
+| | `varhadi` / `warhadi`| **वऱ्हाडी** | `['वऱ्हाडी']` |
+| | `vidarbha` / `vidarbhi` | **विदर्भ** / **विदर्भी** | `['विदर्भ', 'विदर्भी', 'विदर्भीय']` |
+| **Kokan & Western MH** | `kokan` / `konkan` | **कोकण** | `['कोकण', 'कोकणी']` |
+| | `malvan` / `malvani` | **मालवण** / **मालवणी** | `['मालवण', 'मालवणी']` |
+| | `marathwada` / `marathwadi` | **मराठवाडा** / **मराठवाडी** | `['मराठवाडा', 'मराठवाडी']` |
+| | `mandesh` / `mandeshi` | **मान्देश** / **मान्देशी** | `['मान्देशी', 'मानदेशी']` |
+| **Traditional Foods** | `kalna` / `kalnache` | **कळणा** / **कळण्याचे** | (कळण्याची भाकर / पीठ) |
+| | `shevbhaji` | **शेवभाजी** | (खानदेशी शेवभाजी) |
+| | `thecha` | **ठेचा** | (मिरचीचा ठेचा) |
+| | `bharit` | **भरीत** | (वांग्याचे भरीत) |
+| | `puranpoli` | **पुरणपोळी** | (पुरणपोळी) |
+| | `pithla` / `pithle` | **पिठलं** / **पिठले** | (पिठलं-भाकरी) |
+| **Business & Trade** | `bhandar` / `kiranabhandar` | **भांडार** / **किराणा भांडार** | |
+| | `vyapari` / `kharedidar` | **व्यापारी** / **खरेदीदार** | |
+| | `kamgar` / `karagir` | **कामगार** / **कारागीर** | |
 
 ---
 
