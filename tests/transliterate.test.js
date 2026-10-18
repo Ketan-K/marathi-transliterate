@@ -479,3 +479,100 @@ test("Accurately transliterates shanti and all similar/related cases (kana+anusv
   assert.ok(shaktiSuggs.includes("शक्ती"));
 });
 
+test("Accurately transliterates Khandeshi, Ahirani, regional dialects, traditional foods and business terms", () => {
+  // 1. Khandesh & Ahirani
+  assert.equal(transliterateWord("khandeshi"), "खान्देशी");
+  assert.equal(transliterateWord("khaandeshi"), "खान्देशी");
+  assert.equal(transliterateWord("khandesh"), "खान्देश");
+  assert.equal(transliterateWord("khaandesh"), "खान्देश");
+  assert.equal(transliterateWord("khandeshkar"), "खान्देशकर");
+  assert.equal(transliterateWord("khandoba"), "खंडोबा");
+  assert.equal(transliterateWord("khandvi"), "खांडवी");
+  assert.equal(transliterateWord("ahirani"), "अहिराणी");
+  assert.equal(transliterateWord("aahirani"), "अहिराणी");
+  assert.equal(transliterateWord("ahir"), "अहिर");
+
+  // Khandesh Suggestions test
+  const khandeshiSuggs = getSuggestions("khandeshi");
+  assert.equal(khandeshiSuggs[0], "खान्देशी");
+  assert.ok(khandeshiSuggs.includes("खानदेशी"));
+  assert.ok(khandeshiSuggs.includes("खांदेशी"));
+
+  const khandeshSuggs = getSuggestions("khandesh");
+  assert.equal(khandeshSuggs[0], "खान्देश");
+  assert.ok(khandeshSuggs.includes("खानदेश"));
+  assert.ok(khandeshSuggs.includes("खांदेश"));
+
+  // 2. Other Regions & Dialects (Varhad, Kokan, Malvan, Marathwada, Vidarbha, Mandesh)
+  assert.equal(transliterateWord("varhad"), "वऱ्हाड");
+  assert.equal(transliterateWord("warhad"), "वऱ्हाड");
+  assert.equal(transliterateWord("varhadi"), "वऱ्हाडी");
+  assert.equal(transliterateWord("warhadi"), "वऱ्हाडी");
+  assert.equal(transliterateWord("kokan"), "कोकण");
+  assert.equal(transliterateWord("konkan"), "कोकण");
+  assert.equal(transliterateWord("kokani"), "कोकणी");
+  assert.equal(transliterateWord("konkani"), "कोकणी");
+  assert.equal(transliterateWord("koknastha"), "कोकणस्थ");
+  assert.equal(transliterateWord("malvan"), "मालवण");
+  assert.equal(transliterateWord("malvani"), "मालवणी");
+  assert.equal(transliterateWord("marathwada"), "मराठवाडा");
+  assert.equal(transliterateWord("marathwadi"), "मराठवाडी");
+  assert.equal(transliterateWord("vidarbha"), "विदर्भ");
+  assert.equal(transliterateWord("vidarbhi"), "विदर्भी");
+  assert.equal(transliterateWord("vidarbhiya"), "विदर्भीय");
+  assert.equal(transliterateWord("mandesh"), "मान्देश");
+  assert.equal(transliterateWord("mandeshi"), "मान्देशी");
+  assert.equal(transliterateWord("marhati"), "मऱ्हाटी");
+  assert.equal(transliterateWord("marhatta"), "मऱ्हाटा");
+
+  // 3. Languages & Communities
+  assert.equal(transliterateWord("kannada"), "कन्नड");
+  assert.equal(transliterateWord("kanadi"), "कानडी");
+  assert.equal(transliterateWord("marwadi"), "मारवाडी");
+  assert.equal(transliterateWord("sindhi"), "सिंधी");
+  assert.equal(transliterateWord("gujarati"), "गुजराती");
+  assert.equal(transliterateWord("rajasthani"), "राजस्थानी");
+  assert.equal(transliterateWord("bengali"), "बंगाली");
+  assert.equal(transliterateWord("punjabi"), "पंजाबी");
+  assert.equal(transliterateWord("deshastha"), "देशस्थ");
+
+  const sindhiSuggs = getSuggestions("sindhi");
+  assert.ok(sindhiSuggs.includes("सिंधी"));
+  assert.ok(sindhiSuggs.includes("सिन्धी"));
+
+  // 4. Kirana & Business Terms
+  assert.equal(transliterateWord("bhandar"), "भांडार");
+  assert.equal(transliterateWord("vastubhandar"), "वस्तुभांडार");
+  assert.equal(transliterateWord("kiranabhandar"), "किराणा भांडार");
+  assert.equal(transliterateWord("vyapari"), "व्यापारी");
+  assert.equal(transliterateWord("kharedidar"), "खरेदीदार");
+  assert.equal(transliterateWord("karagir"), "कारागीर");
+  assert.equal(transliterateWord("kamgar"), "कामगार");
+
+  // 5. Khandeshi & Traditional Maharashtrian Foods
+  assert.equal(transliterateWord("kalna"), "कळणा");
+  assert.equal(transliterateWord("kalnache"), "कळण्याचे");
+  assert.equal(transliterateWord("thecha"), "ठेचा");
+  assert.equal(transliterateWord("shevbhaji"), "शेवभाजी");
+  assert.equal(transliterateWord("bharit"), "भरीत");
+  assert.equal(transliterateWord("vangyachebharit"), "वांग्याचे भरीत");
+  assert.equal(transliterateWord("puranpoli"), "पुरणपोळी");
+  assert.equal(transliterateWord("pithla"), "पिठलं");
+  assert.equal(transliterateWord("pithle"), "पिठले");
+  assert.equal(transliterateWord("solkadhi"), "सोलकढी");
+  assert.equal(transliterateWord("ukadpendi"), "उकडपेंडी");
+  assert.equal(transliterateWord("chakli"), "चकली");
+  assert.equal(transliterateWord("shankarpali"), "शंकरपाळी");
+  assert.equal(transliterateWord("anarse"), "अनारसे");
+  assert.equal(transliterateWord("vadapav"), "वडापाव");
+  assert.equal(transliterateWord("misalpav"), "मिसळपाव");
+  assert.equal(transliterateWord("basundi"), "बासुंदी");
+  assert.equal(transliterateWord("pedhe"), "पेढे");
+  assert.equal(transliterateWord("modak"), "मोदक");
+
+  // 6. Full sentence test
+  const sentence = "khandeshi shevbhaji ani kalnache pith khup bhari ahe";
+  assert.equal(transliterate(sentence), "खान्देशी शेवभाजी आणि कळण्याचे पीठ खूप भारी आहे");
+});
+
+

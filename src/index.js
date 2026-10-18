@@ -155,6 +155,31 @@ export function getSuggestions(word, options = {}) {
     add(MARATHI_DICTIONARY[clean]);
   }
 
+  // 1b. Priority spelling alternates for regional & cultural words
+  if (clean === "khandeshi" || clean === "khaandeshi") {
+    add("खानदेशी");
+    add("खांदेशी");
+  } else if (clean === "khandesh" || clean === "khaandesh") {
+    add("खानदेश");
+    add("खांदेश");
+  } else if (clean === "mandeshi" || clean === "maandeshi") {
+    add("मानदेशी");
+    add("मांदेशी");
+  } else if (clean === "mandesh" || clean === "maandesh") {
+    add("मानदेश");
+    add("मांदेश");
+  } else if (clean === "sindhi") {
+    add("सिन्धी");
+  } else if (clean === "kannada") {
+    add("कानडी");
+  } else if (clean === "kanadi") {
+    add("कन्नड");
+  } else if (clean === "vidarbha") {
+    add("विदर्भी");
+  } else if (clean === "vidarbhi") {
+    add("विदर्भीय");
+  }
+
   // 2. Check local/memory cache
   const cached = getCachedWord(clean);
   if (cached) {
@@ -332,6 +357,38 @@ export function getSuggestions(word, options = {}) {
       add(transiterateCompound(clean.slice(0, -5), "शेठ"));
     }
 
+    // 4r. Khandesh, Mandesh & Regional alternate spellings (e.g. खान्देशी, खानदेशी, खांदेशी)
+    if (clean.startsWith("khandesh") || clean.startsWith("khaandesh")) {
+      add("खान्देशी");
+      add("खानदेशी");
+      add("खांदेशी");
+      add("खान्देश");
+      add("खानदेश");
+      add("खांदेश");
+    }
+    if (clean.startsWith("mandesh") || clean.startsWith("maandesh")) {
+      add("मान्देशी");
+      add("मानदेशी");
+      add("मान्देश");
+      add("मानदेश");
+    }
+    if (clean.startsWith("sindh")) {
+      add("सिंधी");
+      add("सिन्धी");
+    }
+    if (clean.startsWith("ahirani") || clean.startsWith("aahirani")) {
+      add("अहिराणी");
+      add("अहिराणि");
+    }
+    if (clean.startsWith("vidarbh")) {
+      add("विदर्भ");
+      add("विदर्भी");
+      add("विदर्भीय");
+    }
+    if (clean.startsWith("varhad") || clean.startsWith("warhad")) {
+      add("वऱ्हाड");
+      add("वऱ्हाडी");
+    }
   }
 
   // Background fetch to enrich cache if online (non-blocking)
