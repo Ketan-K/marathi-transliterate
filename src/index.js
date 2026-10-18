@@ -459,6 +459,22 @@ export function getSuggestions(word, options = {}) {
   return suggestions.slice(0, max);
 }
 
+import {
+  matchMarathi,
+  scoreMarathiMatch,
+  searchMarathi,
+  expandSearchVariants,
+  normalizePhonetics
+} from "./search.js";
+
+export {
+  matchMarathi,
+  scoreMarathiMatch,
+  searchMarathi,
+  expandSearchVariants,
+  normalizePhonetics
+};
+
 // Default export
 export default {
   transliterate,
@@ -488,5 +504,11 @@ export default {
   isNapunsaklinga,
   isDualGender,
   isUbhaya,
-  extendGenderDictionary
+  extendGenderDictionary,
+  matchMarathi,
+  scoreMarathiMatch,
+  searchMarathi,
+  expandSearchVariants,
+  normalizePhonetics
 };
+
