@@ -343,3 +343,42 @@ test("Accurately transliterates Kranti and Watt across all platforms offline", (
   // Compound phrase transliteration
   assert.equal(transliterate("9 watt bulb ani kranti oil"), "9 वॉट बल्ब आणि क्रांती ऑईल");
 });
+
+test("Accurately transliterates customer honorifics, names, titles and bhai/bhau/bhaiyys", () => {
+  // bhaiyys / bhaiyya / bhaiya / bhayya / bhai / bhau
+  assert.equal(transliterateWord("bhaiyys"), "भैय्या");
+  assert.equal(transliterateWord("bhaiyya"), "भैय्या");
+  assert.equal(transliterateWord("bhaiya"), "भैया");
+  assert.equal(transliterateWord("bhayya"), "भय्या");
+  assert.equal(transliterateWord("bhai"), "भाई");
+  assert.equal(transliterateWord("bhau"), "भाऊ");
+
+  const bhaiyysSug = getSuggestions("bhaiyys");
+  assert.ok(bhaiyysSug.includes("भैय्या"));
+  assert.ok(bhaiyysSug.includes("भैया"));
+
+  const bhaiyyaSug = getSuggestions("bhaiyya");
+  assert.ok(bhaiyyaSug.includes("भैय्या"));
+  assert.ok(bhaiyyaSug.includes("भैया"));
+  assert.ok(bhaiyyaSug.includes("भय्या"));
+
+  // Common customer titles
+  assert.equal(transliterateWord("mama"), "मामा");
+  assert.equal(transliterateWord("kaka"), "काका");
+  assert.equal(transliterateWord("dada"), "दादा");
+  assert.equal(transliterateWord("tai"), "ताई");
+  assert.equal(transliterateWord("didi"), "दीदी");
+  assert.equal(transliterateWord("sheth"), "शेठ");
+  assert.equal(transliterateWord("saheb"), "साहेब");
+  assert.equal(transliterateWord("anna"), "अण्णा");
+  assert.equal(transliterateWord("appa"), "आप्पा");
+
+  // Diphthongs ai and au
+  assert.equal(transliterateWord("paisa"), "पैसा");
+  assert.equal(transliterateWord("aurat"), "औरत");
+
+  // Multi-word customer naming in transliterate
+  assert.equal(transliterate("sachin bhaiyya"), "सचिन भैय्या");
+  assert.equal(transliterate("ramesh bhai"), "रमेश भाई");
+  assert.equal(transliterate("anil bhau"), "अनिल भाऊ");
+});

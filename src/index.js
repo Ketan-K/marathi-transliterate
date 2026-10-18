@@ -268,6 +268,18 @@ export function getSuggestions(word, options = {}) {
         if (withKanaAnusvar.endsWith("ी")) add(withKanaAnusvar.slice(0, -1) + "ि");
       }
     }
+
+    // 4q. Customer honorifics & bhai/bhau expansions
+    if (clean.startsWith("bhai") || clean.startsWith("bhay")) {
+      add("भैय्या");
+      add("भैया");
+      add("भय्या");
+      add("भाई");
+    }
+    if (clean.startsWith("bhau")) {
+      add("भाऊ");
+    }
+
   }
 
   // Background fetch to enrich cache if online (non-blocking)

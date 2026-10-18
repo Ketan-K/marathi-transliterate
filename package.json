@@ -1,6 +1,6 @@
 {
   "name": "marathi-transliterate",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "Zero-dependency, offline-first Marathi / Devanagari phonetic transliteration library. Converts English typing to Marathi (e.g. sakhar -> साखर) seamlessly in plain JS, Node.js, and frontend frameworks.",
   "type": "module",
   "main": "src/index.js",
