@@ -237,6 +237,85 @@ Attaches keyboard listeners to an `<input>` or `<textarea>` element.
 
 ---
 
+---
+
+## 🧬 Marathi Grammatical Gender & Linguistics (लिंग व्यवस्था)
+
+`marathi-transliterate` includes a zero-dependency, offline grammatical gender analyzer and inflection engine for Marathi nouns, supporting **पुल्लिंग (Masculine / तो)**, **स्त्रीलिंग (Feminine / ती)**, **नपुंसकलिंग (Neuter / ते)**, and **उभयलिंग (Dual / Common)**.
+
+You can import directly from the root package or via the dedicated submodules `marathi-transliterate/gender` / `marathi-transliterate/ling`:
+
+```javascript
+import {
+  getGender,
+  getPronoun,
+  formatWithPronoun,
+  getOppositeGender,
+  changeGender,
+  isMasculine,
+  isFeminine,
+  isNeuter,
+  isDualGender,
+  GENDERS
+} from "marathi-transliterate";
+// Or: import { getGender } from "marathi-transliterate/gender";
+```
+
+### 1. Gender Detection (`getGender`)
+Accepts either Devanagari Marathi text or phonetic Latin English typing (auto-transliterated):
+
+```javascript
+// Kirana & Grocery items
+getGender("कांदा");
+// → { word: "कांदा", gender: "पुल्लिंग", pronoun: "तो", label: "पुल्लिंग (तो)", formatted: "तो कांदा" }
+
+getGender("sakhar");
+// → { word: "sakhar", devanagari: "साखर", gender: "स्त्रीलिंग", pronoun: "ती", formatted: "ती साखर" }
+
+getGender("tel");
+// → { word: "tel", devanagari: "तेल", gender: "नपुंसकलिंग", pronoun: "ते", formatted: "ते तेल" }
+```
+
+### 2. Demonstrative Pronoun Resolution (`getPronoun`, `formatWithPronoun`)
+```javascript
+getPronoun("साखर"); // → "ती"
+getPronoun("कांदा"); // → "तो"
+getPronoun("दूध");   // → "ते"
+
+formatWithPronoun("कांदा");  // → "तो कांदा"
+formatWithPronoun("साखर");  // → "ती साखर"
+formatWithPronoun("पुस्तक"); // → "ते पुस्तक"
+```
+
+### 3. Opposite Gender Inflection (`getOppositeGender`, `changeGender`)
+Pairs masculine and feminine counterparts (Family, Occupations, Titles, Animals):
+
+```javascript
+getOppositeGender("मुलगा");   // → "मुलगी"
+getOppositeGender("घोडा");    // → "घोडी"
+getOppositeGender("बैल");     // → "गाय"
+getOppositeGender("शिक्षक");  // → "शिक्षिका"
+getOppositeGender("मालक");    // → "मालकीण"
+getOppositeGender("राजा");    // → "राणी"
+getOppositeGender("वाघ");     // → "वाघीण"
+```
+
+### 4. Dual / Common Gender Recognition (`isDualGender`)
+Words that naturally take both masculine and feminine in Marathi:
+```javascript
+isDualGender("बाग"); // → true ("तो बाग" / "ती बाग")
+isDualGender("वेळ"); // → true ("तो वेळ" / "ती वेळ")
+```
+
+### 5. Runtime Extensibility (`extendGenderDictionary`)
+```javascript
+import { extendGenderDictionary, GENDERS } from "marathi-transliterate";
+
+extendGenderDictionary({
+  "अनोखीवस्तू": GENDERS.STREELINGA
+});
+```
+
 ## License
 
 MIT © Ketan Katore

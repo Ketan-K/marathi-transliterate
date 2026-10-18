@@ -11,6 +11,51 @@ import { attachDevanagari } from "./dom.js";
 
 export { MARATHI_DICTIONARY, fetchOnlineMarathi, attachDevanagari };
 
+import {
+  GENDERS,
+  GENDER_KEYS,
+  PRONOUNS,
+  OPPOSITE_GENDER_PAIRS,
+  MARATHI_GENDER_DICTIONARY,
+  getGender,
+  getPronoun,
+  formatWithPronoun,
+  getOppositeGender,
+  changeGender,
+  isMasculine,
+  isPullinga,
+  isFeminine,
+  isStreelinga,
+  isNeuter,
+  isNapunsaklinga,
+  isDualGender,
+  isUbhaya,
+  extendGenderDictionary
+} from "./gender.js";
+
+export {
+  GENDERS,
+  GENDER_KEYS,
+  PRONOUNS,
+  OPPOSITE_GENDER_PAIRS,
+  MARATHI_GENDER_DICTIONARY,
+  getGender,
+  getPronoun,
+  formatWithPronoun,
+  getOppositeGender,
+  changeGender,
+  isMasculine,
+  isPullinga,
+  isFeminine,
+  isStreelinga,
+  isNeuter,
+  isNapunsaklinga,
+  isDualGender,
+  isUbhaya,
+  extendGenderDictionary
+};
+
+
 /**
  * Extends or overrides the global transliteration dictionary at runtime.
  * @param {Record<string, string>} customWords - Map of English -> Marathi words
@@ -424,5 +469,24 @@ export default {
   extendDictionary,
   normalizeMarathi,
   MARATHI_DICTIONARY,
-  fetchOnlineMarathi
+  fetchOnlineMarathi,
+  GENDERS,
+  GENDER_KEYS,
+  PRONOUNS,
+  OPPOSITE_GENDER_PAIRS,
+  MARATHI_GENDER_DICTIONARY,
+  getGender,
+  getPronoun,
+  formatWithPronoun,
+  getOppositeGender,
+  changeGender,
+  isMasculine,
+  isPullinga,
+  isFeminine,
+  isStreelinga,
+  isNeuter,
+  isNapunsaklinga,
+  isDualGender,
+  isUbhaya,
+  extendGenderDictionary
 };

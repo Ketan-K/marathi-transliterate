@@ -3,6 +3,10 @@
  * Kirana/grocery items, customer names, units, and shop terms.
  */
 export const MARATHI_DICTIONARY = {
+  "mulga": "मुलगा",
+  "mulgi": "मुलगी",
+  "pustak": "पुस्तक",
+
   // --- Popular Marathi Kirana Brands, Masale & Staples with Anusvara ---
   'rambandhu': 'रामबंधू',
   'rambandhoo': 'रामबंधू',
