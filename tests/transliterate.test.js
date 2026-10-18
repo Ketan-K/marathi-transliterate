@@ -382,3 +382,44 @@ test("Accurately transliterates customer honorifics, names, titles and bhai/bhau
   assert.equal(transliterate("ramesh bhai"), "रमेश भाई");
   assert.equal(transliterate("anil bhau"), "अनिल भाऊ");
 });
+
+test("Accurately transliterates compound honorifics (-saheb, -rao, -sheth), fast-typing slips and family kinship", () => {
+  // Fast typing & plural slips
+  assert.equal(transliterateWord("bhais"), "भाई");
+  assert.equal(transliterateWord("bhaus"), "भाऊ");
+  assert.equal(transliterateWord("bhaiyyas"), "भैय्या");
+  assert.equal(transliterateWord("kakas"), "काका");
+  assert.equal(transliterateWord("mamas"), "मामा");
+  assert.equal(transliterateWord("dadas"), "दादा");
+  assert.equal(transliterateWord("patils"), "पाटील");
+
+  // Compound -saheb names
+  assert.equal(transliterateWord("bhausaheb"), "भाऊसाहेब");
+  assert.equal(transliterateWord("dadasaheb"), "दादासाहेब");
+  assert.equal(transliterateWord("kakasaheb"), "काकासाहेब");
+  assert.equal(transliterateWord("mamasaheb"), "मामासाहेब");
+  assert.equal(transliterateWord("nanasaheb"), "नानासाहेब");
+  assert.equal(transliterateWord("appasaheb"), "आप्पासाहेब");
+  assert.equal(transliterateWord("annasaheb"), "अण्णासाहेब");
+  assert.equal(transliterateWord("babasaheb"), "बाबासाहेब");
+
+  // Compound -rao names
+  assert.equal(transliterateWord("baburao"), "बाबूराव");
+  assert.equal(transliterateWord("anandrao"), "आनंदराव");
+  assert.equal(transliterateWord("shankarrao"), "शंकरराव");
+  assert.equal(transliterateWord("patilrao"), "पाटीलराव");
+
+  // Suffixes and Kinship
+  assert.equal(transliterateWord("shethji"), "शेठजी");
+  assert.equal(transliterateWord("mavshi"), "मावशी");
+  assert.equal(transliterateWord("maushi"), "मावशी");
+  assert.equal(transliterateWord("vahini"), "वहिनी");
+  assert.equal(transliterateWord("bhavji"), "भावजी");
+  assert.equal(transliterateWord("aaji"), "आजी");
+  assert.equal(transliterateWord("ajoba"), "आजोबा");
+
+  // Dairy & Grocery staples
+  assert.equal(transliterateWord("doodh"), "दूध");
+  assert.equal(transliterateWord("toop"), "तूप");
+  assert.equal(transliterateWord("taak"), "ताक");
+});

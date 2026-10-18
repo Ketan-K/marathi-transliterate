@@ -53,6 +53,37 @@ export function transliterateWord(word) {
     return MARATHI_DICTIONARY[clean];
   }
 
+  // 1b. Check trailing "s" fast-typing slip (e.g. bhais -> भाई, bhaus -> भाऊ, kakas -> काका)
+  if (clean.endsWith("s") && clean.length > 2) {
+    const base = clean.replace(/s+$/, "");
+    if (MARATHI_DICTIONARY[base]) {
+      return MARATHI_DICTIONARY[base];
+    }
+  }
+
+  // 1c. Check compound honorific suffixes (-saheb, -sahab, -rao, -sheth, -seth, -ji, -bai)
+  if (clean.endsWith("saheb") && clean.length > 5) {
+    return transliterateWord(clean.slice(0, -5)) + "साहेब";
+  }
+  if (clean.endsWith("sahab") && clean.length > 5) {
+    return transliterateWord(clean.slice(0, -5)) + "साहेब";
+  }
+  if (clean.endsWith("rao") && clean.length > 3) {
+    return transliterateWord(clean.slice(0, -3)) + "राव";
+  }
+  if (clean.endsWith("sheth") && clean.length > 5) {
+    return transliterateWord(clean.slice(0, -5)) + "शेठ";
+  }
+  if (clean.endsWith("seth") && clean.length > 4) {
+    return transliterateWord(clean.slice(0, -4)) + "शेठ";
+  }
+  if (clean.endsWith("ji") && clean.length > 3) {
+    return transliterateWord(clean.slice(0, -2)) + "जी";
+  }
+  if (clean.endsWith("bai") && clean.length > 4) {
+    return transliterateWord(clean.slice(0, -3)) + "बाई";
+  }
+
   // 2. Check local/memory cache
   const cached = getCachedWord(clean);
   if (cached && cached.length > 0) {
@@ -100,6 +131,12 @@ export const toDevanagari = transliterate;
  * @param {boolean} [options.includeOriginal=true]
  * @returns {string[]}
  */
+function transiterateCompound(prefix, suffix) {
+  if (!prefix) return suffix;
+  const p = MARATHI_DICTIONARY[prefix] || phoneticTransliterateWord(prefix);
+  return p + suffix;
+}
+
 export function getSuggestions(word, options = {}) {
   if (!word || !word.trim()) return [];
   const clean = word.toLowerCase().trim();
@@ -278,6 +315,21 @@ export function getSuggestions(word, options = {}) {
     }
     if (clean.startsWith("bhau")) {
       add("भाऊ");
+    }
+    if (clean.endsWith("s") && clean.length > 2) {
+      const base = clean.replace(/s+$/, "");
+      if (MARATHI_DICTIONARY[base]) {
+        add(MARATHI_DICTIONARY[base]);
+      }
+    }
+    if (clean.endsWith("saheb") && clean.length > 5) {
+      add(transiterateCompound(clean.slice(0, -5), "साहेब"));
+    }
+    if (clean.endsWith("rao") && clean.length > 3) {
+      add(transiterateCompound(clean.slice(0, -3), "राव"));
+    }
+    if (clean.endsWith("sheth") && clean.length > 5) {
+      add(transiterateCompound(clean.slice(0, -5), "शेठ"));
     }
 
   }

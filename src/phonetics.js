@@ -86,6 +86,7 @@ const INDEPENDENT_VOWELS = [
 ];
 
 const MATRAS = [
+  { en: "ao", mr: "ाव" },
   { en: "aa", mr: "ा" },
   { en: "A", mr: "ा", caseSensitive: true },
   { en: "ai", mr: "ै" },
@@ -151,6 +152,10 @@ export function phoneticTransliterateWord(text) {
           matchedVowel = true;
         } else if (clean[i].toLowerCase() === "u") {
           res += "ऊ";
+          i += 1;
+          matchedVowel = true;
+        } else if (clean[i].toLowerCase() === "o" && prevChar.toLowerCase() === "a") {
+          res += "व";
           i += 1;
           matchedVowel = true;
         } else if (clean[i].toLowerCase() === "a") {
