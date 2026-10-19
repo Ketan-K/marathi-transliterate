@@ -5,16 +5,21 @@
   "type": "module",
   "main": "src/index.js",
   "module": "src/index.js",
+  "unpkg": "dist/marathi-transliterate.min.js",
+  "jsdelivr": "dist/marathi-transliterate.min.js",
   "exports": {
     ".": "./src/index.js",
     "./dom": "./src/dom.js",
     "./dictionary": "./src/dictionary.js",
     "./gender": "./src/gender.js",
     "./ling": "./src/gender.js",
-    "./search": "./src/search.js"
+    "./search": "./src/search.js",
+    "./dist/*": "./dist/*"
   },
   "scripts": {
-    "test": "node --test tests/*.test.js"
+    "build": "node scripts/build.js",
+    "test": "node --test tests/*.test.js",
+    "prepublishOnly": "npm run test && npm run build"
   },
   "keywords": [
     "marathi",
@@ -35,6 +40,7 @@
   "license": "MIT",
   "files": [
     "src",
+    "dist",
     "README.md",
     "LICENSE"
   ],
@@ -45,5 +51,8 @@
   "bugs": {
     "url": "https://github.com/Ketan-K/marathi-transliterate/issues"
   },
-  "homepage": "https://github.com/Ketan-K/marathi-transliterate#readme"
+  "homepage": "https://github.com/Ketan-K/marathi-transliterate#readme",
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  }
 }
