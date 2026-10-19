@@ -22,6 +22,26 @@ import {
 test("Accurately identifies gender for Marathi grocery and kirana items", () => {
   // पुल्लिंग (तो)
   assert.equal(getGender("तांदूळ").gender, GENDERS.PULLINGA);
+  assert.equal(getGender("कम्फर्ट").gender, GENDERS.PULLINGA);
+  assert.equal(getGender("खान्देशी मसाला").gender, GENDERS.PULLINGA);
+  assert.equal(getGender("फॅब्रिक कंडिशनर").gender, GENDERS.PULLINGA);
+  assert.equal(getGender("फिनाईल").gender, GENDERS.PULLINGA);
+  assert.equal(getGender("झुणका").gender, GENDERS.PULLINGA);
+  assert.equal(getGender("तांबडा रस्सा").gender, GENDERS.PULLINGA);
+  assert.equal(getGender("कोल्हापुरी मसाला").gender, GENDERS.PULLINGA);
+
+  // नपुंसकलिंग (ते)
+  assert.equal(getGender("लिक्विड").gender, GENDERS.NAPUNSAKLINGA);
+  assert.equal(getGender("कम्फर्ट लिक्विड").gender, GENDERS.NAPUNSAKLINGA);
+  assert.equal(getGender("फिनाईल लिक्विड").gender, GENDERS.NAPUNSAKLINGA);
+  assert.equal(getGender("डिटर्जंट लिक्विड").gender, GENDERS.NAPUNSAKLINGA);
+  assert.equal(getGender("थालीपीठ").gender, GENDERS.NAPUNSAKLINGA);
+
+  // स्त्रीलिंग (ती)
+  assert.equal(getGender("खान्देशी शेवभाजी").gender, GENDERS.STREELINGA);
+  assert.equal(getGender("पाटवडी").gender, GENDERS.STREELINGA);
+  assert.equal(getGender("भाजणी").gender, GENDERS.STREELINGA);
+  assert.equal(getGender("शेंगदाणा चटणी").gender, GENDERS.STREELINGA);
   assert.equal(getGender("कांदा").gender, GENDERS.PULLINGA);
   assert.equal(getGender("बटाटा").gender, GENDERS.PULLINGA);
   assert.equal(getGender("गूळ").gender, GENDERS.PULLINGA);

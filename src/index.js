@@ -129,6 +129,48 @@ export function transliterateWord(word) {
     return transliterateWord(clean.slice(0, -3)) + "बाई";
   }
 
+  // 1d. Compound Indian / Marathi customer name suffixes (-nath, -lal, -das, -prasad, -kant, -chand, -kumar, -dhar)
+  if (clean.endsWith("nath") && clean.length > 5) {
+    return transliterateWord(clean.slice(0, -4)) + "नाथ";
+  }
+  if (clean.endsWith("lal") && clean.length > 4) {
+    return transliterateWord(clean.slice(0, -3)) + "लाल";
+  }
+  if (clean.endsWith("das") && clean.length > 4) {
+    return transliterateWord(clean.slice(0, -3)) + "दास";
+  }
+  if (clean.endsWith("prasad") && clean.length > 7) {
+    return transliterateWord(clean.slice(0, -6)) + "प्रसाद";
+  }
+  if (clean.endsWith("kant") && clean.length > 5) {
+    return transliterateWord(clean.slice(0, -4)) + "कांत";
+  }
+  if (clean.endsWith("chand") && clean.length > 6) {
+    return transliterateWord(clean.slice(0, -5)) + "चंद";
+  }
+  if (clean.endsWith("kumar") && clean.length > 6) {
+    return transliterateWord(clean.slice(0, -5)) + "कुमार";
+  }
+  if (clean.endsWith("dhar") && clean.length > 5) {
+    return transliterateWord(clean.slice(0, -4)) + "धर";
+  }
+  if (clean.endsWith("singh") && clean.length > 6) {
+    return transliterateWord(clean.slice(0, -5)) + "सिंह";
+  }
+  if (clean.endsWith("sing") && clean.length > 5) {
+    return transliterateWord(clean.slice(0, -4)) + "सिंग";
+  }
+  if ((clean.endsWith("krishna") || clean.endsWith("krushna")) && clean.length > 7) {
+    const prefix = clean.replace(/kr[iu]shna$/, "");
+    if (prefix === "bal" || prefix === "baal" || prefix === "bala") {
+      return "बाळकृष्ण";
+    }
+    if (prefix === "ram" || prefix === "raam" || prefix === "rama") {
+      return "रामकृष्ण";
+    }
+    return transliterateWord(prefix) + "कृष्ण";
+  }
+
   // 2. Check local/memory cache
   const cached = getCachedWord(clean);
   if (cached && cached.length > 0) {
@@ -201,12 +243,117 @@ export function getSuggestions(word, options = {}) {
   }
 
   // 1b. Priority spelling alternates for regional & cultural words
-  if (clean === "khandeshi" || clean === "khaandeshi") {
+  if (clean === "nivrutt" || clean === "nivrutta") {
+    add("निवृत्त");
+    add("निवृत्ती");
+    add("निवृत्ति");
+  } else if (clean === "nivrutti" || clean === "nivritti") {
+    add("निवृत्ती");
+    add("निवृत्ति");
+    add("निवृत्त");
+  } else if (clean === "nivruttinath") {
+    add("निवृत्तीनाथ");
+    add("निवृत्तिनाथ");
+  } else if (clean === "krupa") {
+    add("कृपा");
+  } else if (clean === "krushna") {
+    add("कृष्ण");
+  } else if (clean === "balkrishna" || clean === "balkrushna" || clean === "baalkrishna" || clean === "baalkrushna" || clean === "balakrishna" || clean === "balakrushna") {
+    add("बाळकृष्ण");
+    add("बालकृष्ण");
+  } else if (clean === "ramkrishna" || clean === "ramkrushna" || clean === "raamkrishna" || clean === "raamkrushna" || clean === "ramakrishna" || clean === "ramakrushna") {
+    add("रामकृष्ण");
+  } else if (clean === "amrut") {
+    add("अमृत");
+  } else if (clean === "guru") {
+    add("गुरू");
+    add("गुरु");
+  } else if (clean === "jagannath" || clean === "jaganath" || clean === "jagganath" || clean === "jagannatha") {
+    add("जगन्नाथ");
+    add("जगंनाथ");
+  } else if (clean === "bansi" || clean === "bansee") {
+    add("बन्सी");
+    add("बंसी");
+  } else if (clean === "bansilal") {
+    add("बन्सीलाल");
+    add("बंसीलाल");
+  } else if (clean === "bansidhar") {
+    add("बन्सीधर");
+    add("बंसीधर");
+  } else if (clean === "gorakshanath") {
+    add("गोरक्षनाथ");
+    add("गोरखनाथ");
+  } else if (clean === "gorakhnath") {
+    add("गोरखनाथ");
+    add("गोरक्षनाथ");
+  } else if (clean === "goraksha" || clean === "goraksh") {
+    add("गोरक्ष");
+  } else if (clean === "khandeshi" || clean === "khaandeshi") {
     add("खानदेशी");
     add("खांदेशी");
   } else if (clean === "khandesh" || clean === "khaandesh") {
     add("खानदेश");
     add("खांदेश");
+  } else if (clean === "khandeshimasala" || clean === "khaandeshimasala") {
+    add("खानदेशी मसाला");
+    add("खांदेशी मसाला");
+  } else if (clean === "comfort" || clean === "kamfart" || clean === "kamfort") {
+    add("कंफर्ट");
+    add("कॉम्फर्ट");
+  } else if (clean === "liquid" || clean === "likwid" || clean === "likvid") {
+    add("लिक्विड");
+    add("लिक्वीड");
+  } else if (clean === "comfortliquid" || clean === "kamfartliquid" || clean === "kamfortliquid") {
+    add("कम्फर्ट लिक्विड");
+    add("कंफर्ट लिक्विड");
+  } else if (clean === "phenyl" || clean === "phenyle" || clean === "finail" || clean === "finyle") {
+    add("फिनाईल");
+    add("फिनाइल");
+  } else if (clean === "genteel" || clean === "jenteel") {
+    add("जेंटील");
+    add("जेंटिल");
+  } else if (clean === "ezee") {
+    add("इझी");
+    add("इजी");
+  } else if (clean === "ujala") {
+    add("उजाला");
+  } else if (clean === "vanish") {
+    add("व्हॅनिश");
+    add("वॅनिश");
+  } else if (clean === "bibade" || clean === "bibde" || clean === "bibda") {
+    add("बिबडे");
+    add("बिबडा");
+  } else if (clean === "dangar") {
+    add("डांगर");
+  } else if (clean === "rodage" || clean === "rodaga") {
+    add("रोडगे");
+    add("रोडगा");
+  } else if (clean === "zunka" || clean === "zhunka" || clean === "jhunka") {
+    add("झुणका");
+    add("झुंकार");
+  } else if (clean === "patwadi") {
+    add("पाटवडी");
+  } else if (clean === "saoji") {
+    add("सावजी");
+  } else if (clean === "rushikesh" || clean === "rishikesh") {
+    add("ऋषिकेश");
+  } else if (clean === "shruti") {
+    add("श्रुती");
+    add("श्रुति");
+  } else if (clean === "kruti") {
+    add("कृती");
+    add("कृति");
+  } else if (clean === "sanskruti") {
+    add("संस्कृती");
+    add("संस्कृति");
+  } else if (clean === "prakruti") {
+    add("प्रकृती");
+    add("प्रकृति");
+  } else if (clean === "rutu" || clean === "ritu") {
+    add("ऋतू");
+    add("ऋतु");
+  } else if (clean === "rutuja" || clean === "rituja") {
+    add("ऋतुजा");
   } else if (clean === "mandeshi" || clean === "maandeshi") {
     add("मानदेशी");
     add("मांदेशी");

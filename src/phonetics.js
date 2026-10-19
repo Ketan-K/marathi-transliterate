@@ -8,6 +8,7 @@ const CONSONANTS = [
   { en: "dny", mr: "ज्ञ" },
   { en: "jn", mr: "ज्ञ" },
   { en: "gy", mr: "ज्ञ" },
+  { en: "qu", mr: "क्व" },
   { en: "ksh", mr: "क्ष" },
   { en: "shr", mr: "श्र" },
   { en: "chh", mr: "छ" },
@@ -58,6 +59,7 @@ const CONSONANTS = [
   { en: "s", mr: "स" },
   { en: "h", mr: "ह" },
   { en: "x", mr: "क्ष" },
+  { en: "q", mr: "क" },
   { en: "z", mr: "झ" }
 ];
 
@@ -168,7 +170,8 @@ export function phoneticTransliterateWord(text) {
       const initialNasal = clean.substring(i, i + 2).toLowerCase();
       if (initialNasal === 'am' || initialNasal === 'an') {
         const charAfter = clean[i + 2];
-        const isFollowedByVowel = charAfter && /[aeiouA]/i.test(charAfter);
+        const isGeminate = (initialNasal === 'an' && charAfter && charAfter.toLowerCase() === 'n') || (initialNasal === 'am' && charAfter && charAfter.toLowerCase() === 'm');
+        const isFollowedByVowel = (charAfter && /[aeiouA]/i.test(charAfter)) || isGeminate;
         if (!isFollowedByVowel) {
           res += 'अं';
           i += 2;
@@ -209,7 +212,8 @@ export function phoneticTransliterateWord(text) {
         const nextTwo = clean.substring(i, i + 2).toLowerCase();
         if (nextTwo === 'am' || nextTwo === 'an') {
           const charAfter = clean[i + 2];
-          const isFollowedByVowel = charAfter && /[aeiouA]/i.test(charAfter);
+          const isGeminate = (nextTwo === 'an' && charAfter && charAfter.toLowerCase() === 'n') || (nextTwo === 'am' && charAfter && charAfter.toLowerCase() === 'm');
+          const isFollowedByVowel = (charAfter && /[aeiouA]/i.test(charAfter)) || isGeminate;
           if (!isFollowedByVowel) {
             res += 'ं';
             i += 2;
@@ -258,7 +262,7 @@ export function phoneticTransliterateWord(text) {
   }
 
   // Standard Marathi Shuddhalekhan Rule: nasal conjuncts before consonants become Anusvara
-  res = res.replace(/(?:न्|म्|ङ्|ञ्|ण्)(?=[क-ह])/g, "ं");
+  res = res.replace(/(?:ङ्|ञ्|ण्(?=[^ण])|न्(?=[^न])|म्(?=[^म]))(?=[क-ह])/g, "ं");
 
   return res;
 }
