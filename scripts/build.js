@@ -14,7 +14,7 @@ const banner = `/**
 const sharedOptions = {
   bundle: true,
   minify: true,
-  sourcemap: true,
+  sourcemap: false,
   legalComments: 'none',
   target: ['es2020', 'node18'],
   logOverride: {
@@ -23,9 +23,10 @@ const sharedOptions = {
 };
 
 async function runBuild() {
-  if (!fs.existsSync('dist')) {
-    fs.mkdirSync('dist', { recursive: true });
+  if (fs.existsSync('dist')) {
+    fs.rmSync('dist', { recursive: true, force: true });
   }
+  fs.mkdirSync('dist', { recursive: true });
 
   console.log(`Building ${pkg.name} v${pkg.version}...`);
 
