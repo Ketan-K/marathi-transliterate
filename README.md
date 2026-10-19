@@ -316,6 +316,125 @@ extendGenderDictionary({
 });
 ```
 
+---
+
+## 🔍 Phonetic Search & Matching Engine (`/search`)
+
+`marathi-transliterate` includes a zero-dependency, high-performance Marathi Phonetic Search Engine designed for POS, catalogs, billing software, and customer lookups. It allows searching Marathi items using Romanized English, Devanagari, or colloquial phonetic spelling variations.
+
+Import directly from the root package or via the dedicated subpath `marathi-transliterate/search`:
+
+```javascript
+import {
+  searchMarathi,
+  matchMarathi,
+  scoreMarathiMatch,
+  normalizePhonetics,
+  expandSearchVariants
+} from "marathi-transliterate";
+// Or: import { searchMarathi } from "marathi-transliterate/search";
+```
+
+### 1. Catalog & Inventory Search (`searchMarathi`)
+Filters and ranks arrays of objects or strings by phonetic relevance score:
+
+```javascript
+const products = [
+  { id: 1, name: 'काजू तुकडा', nameEn: 'Cashew Bits' },
+  { id: 2, name: 'चितळे दूध', nameEn: 'Chitale Milk' },
+  { id: 3, name: 'साबुदाणा', nameEn: 'Sago' },
+  { id: 4, name: 'सोयाबीन तेल 15 लिटर', nameEn: 'Soybean Oil 15L' }
+];
+
+// Search using Romanized English:
+searchMarathi(products, 'chitale', { keys: ['name', 'nameEn'] });
+// → [{ id: 2, name: 'चितळे दूध', nameEn: 'Chitale Milk' }]
+
+// Multi-word search:
+searchMarathi(products, 'soya tel', { keys: ['name', 'nameEn'] });
+// → [{ id: 4, name: 'सोयाबीन तेल 15 लिटर', ... }]
+
+// Prefix search (as user types):
+searchMarathi(products, 'kaj', { keys: ['name'] });
+// → [{ id: 1, name: 'काजू तुकडा', ... }]
+```
+
+### 2. Boolean Match Evaluator (`matchMarathi`)
+Evaluates whether a target string matches a query across transliterations, suggestions, and deep phonetic variations:
+
+```javascript
+// Grocery & Item transliterations
+matchMarathi('काजू', 'kaju');         // → true
+matchMarathi('साबुदाणा', 'sabudana'); // → true
+matchMarathi('चितळे', 'chitale');     // → true
+matchMarathi('पोहे', 'poha');         // → true
+matchMarathi('पापड', 'papad');       // → true
+
+// Deep phonetic variations
+matchMarathi('वाटाणा', 'vatana');     // → true (ण vs न)
+matchMarathi('वाटाणा', 'वाटाना');     // → true (ण vs न)
+matchMarathi('शेव', 'sev');           // → true (श vs स)
+matchMarathi('कांदा', 'कंदा');         // → true (Anuswar tolerance)
+matchMarathi('रवा', 'रबा');           // → true (व vs ब)
+
+// Prefix support (default: true)
+matchMarathi('काजू', 'kaj');          // → true
+matchMarathi('साबुदाणा', 'sab');      // → true
+
+// Multi-word queries (default: 'all')
+matchMarathi('काजू तुकडा', 'kaju tukda'); // → true
+matchMarathi('सोयाबीन तेल 15 लिटर', 'soya tel'); // → true
+```
+
+### 3. Relevance Scoring (`scoreMarathiMatch`)
+Returns a score from `0` to `1000` for sorting search results:
+
+| Score | Match Tier | Example |
+|---|---|---|
+| **1000** | Exact match | `scoreMarathiMatch('काजू', 'काजू')` or `scoreMarathiMatch('काजू', 'kaju')` |
+| **800** | Prefix match | `scoreMarathiMatch('काजू तुकडा', 'kaju')` (Target starts with top transliteration) |
+| **600** | Top transliteration match | `scoreMarathiMatch('मसाला काजू करी', 'kaju')` (Target contains transliteration) |
+| **400** | Secondary suggestion candidate | `scoreMarathiMatch('चितले', 'chitale')` (Candidate in `getSuggestions`) |
+| **200** | Substring match | `scoreMarathiMatch('Cashew Bits', 'cashew')` |
+| **100** | Phonetic normalized match | `scoreMarathiMatch('शेव', 'सेव')` or `scoreMarathiMatch('रवा', 'रबा')` |
+| **0** | No match | `scoreMarathiMatch('हळद', 'sakhar')` |
+
+### 4. Deep Phonetic Normalization (`normalizePhonetics`)
+Normalizes common interchangeable Marathi characters and vowel lengths:
+- **`ळ ➔ ल`** (`चितळे` ↔ `चितले`)
+- **`ण ➔ न`** (`दाणे` ↔ `दाने`, `साबुदाणा` ↔ `साबुदाना`, `धणे` ↔ `धने`, `वाटाणा` ↔ `वाटाना`)
+- **`श, ष ➔ स`** (`शेव` ↔ `सेव`, `शाकर` ↔ `साखर`)
+- **`व ➔ ब`** (`वरई` ↔ `बरई`, `रवा` ↔ `रबा`)
+- **`ी ➔ ि, ू ➔ ु`** (`काजू` ↔ `काजु`, `तूप` ↔ `तुप`)
+- **Anuswar tolerance** (`कांदा` ↔ `कंदा`, `शेंगदाणे` ↔ `शेगदाणे`)
+
+```javascript
+normalizePhonetics("दाणे") === normalizePhonetics("दाने"); // → true
+normalizePhonetics("शेव") === normalizePhonetics("सेव");   // → true
+normalizePhonetics("कांदा") === normalizePhonetics("कंदा"); // → true
+```
+
+---
+
+## 🌐 Browser CDN Usage (`<script>` tag)
+
+You can use `marathi-transliterate` directly in vanilla HTML via unpkg or jsdelivr without any build tools:
+
+```html
+<script src="https://unpkg.com/marathi-transliterate/dist/marathi-transliterate.min.js"></script>
+<script>
+  // Global MarathiTransliterate object is available
+  console.log(MarathiTransliterate.transliterate("sakhar ani kanda"));
+  // → 'साखर आणि कांदा'
+
+  console.log(MarathiTransliterate.searchMarathi(['काजू', 'बदाम'], 'kaju'));
+  // → ['काजू']
+</script>
+```
+
+---
+
 ## License
 
 MIT © Ketan Katore
+
